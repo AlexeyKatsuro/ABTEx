@@ -1,19 +1,28 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.BTEx" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorPrimaryDark">?attr/colorPrimaryVariant</item>
+        <item name="toolbarStyle">@style/Widget.BTEx.Toolbar</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="Theme.BTEx.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="ThemeOverlay.BTEx.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="ThemeOverlay.BTEx.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="Widget.BTEx" parent="@android:style/Widget" />
+
+    <style name="Widget.BTEx.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:theme">@style/Theme.BTEx</item>
+        <item name="popupTheme">@style/ThemeOverlay.BTEx.PopupOverlay</item>
+    </style>
 
 </resources>

@@ -1,13 +1,31 @@
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Android Studio captures folder
+captures/
+
+# IntelliJ
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+
+.idea/runConfigurations.xml
+
+# External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
+
+# Keystore
+*.jks
+keystore.properties
