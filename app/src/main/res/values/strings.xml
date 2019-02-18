@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">BTEx</string>
     <string name="settings">Настройки</string>
+
+    <string name="temperature_val">Температура: %1$s</string>
+    <string name="humidity_val">Влажность: %1$s</string>
+    <string name="co2_val">co2: %1$s</string>
+    <string name="pm1_val">pm1: %1$s</string>
+    <string name="pm10_val">pm10: %1$s</string>
+    <string name="pm25_val">pm25: %1$s</string>
+    <string name="tvoc_val">tvoc: %1$s</string>
 </resources>
