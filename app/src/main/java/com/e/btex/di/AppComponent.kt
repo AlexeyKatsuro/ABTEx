@@ -4,16 +4,23 @@
 
 package com.e.btex.di
 
-import com.e.btex.ui.MainActivity
+import com.e.btex.base.BTExApp
+import com.e.btex.ui.MainBuilder
 import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
-        AppModule::class
+        AndroidSupportInjectionModule::class,
+        AppModule::class,
+        MainBuilder::class
     ]
 )
-interface AppComponent {
-    fun inject(mainActivity: MainActivity)
+interface AppComponent : AndroidInjector<BTExApp> {
+    @Component.Builder
+    abstract class Builder : AndroidInjector.Builder<BTExApp>()
 }
+

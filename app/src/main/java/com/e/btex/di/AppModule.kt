@@ -4,19 +4,14 @@
 
 package com.e.btex.di
 
-import com.e.btex.data.MyEx
-import com.e.btex.data.MyExImpl
+import android.content.Context
+import com.e.btex.base.BTExApp
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 @Module
 class AppModule {
 
-    @Singleton
     @Provides
-    fun provideContext(): MyEx{
-        return MyExImpl()
-    }
-
+    fun provideContext(application: BTExApp ): Context = application.applicationContext
 }

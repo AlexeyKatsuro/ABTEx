@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/main" app:startDestination="@id/mainFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/mainFragment">
 
-    <fragment android:id="@+id/mainFragment"
-              android:name="com.e.btex.ui.plot.PlotFragment"
-              android:label="MainFragment"
-              tools:layout="@layout/fragment_plot"
-    />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.e.btex.ui.plot.PlotFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_plot">
+
+        <action
+            android:id="@+id/showSettingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.e.btex.ui.bluetooth.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings"/>
 </navigation>
