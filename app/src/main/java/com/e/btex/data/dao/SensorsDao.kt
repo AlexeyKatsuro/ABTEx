@@ -10,6 +10,9 @@ import com.e.btex.data.entity.Sensors
 interface SensorsDao {
 
 
+    @Query("SELECT * FROM sensors")
+    fun getAllSernsors(): LiveData<List<Sensors>>
+
     @Query("SELECT * FROM Sensors WHERE time >= :from AND time < :to")
     fun getInTimeRange(from: Long, to: Long): LiveData<List<Sensors>>
 

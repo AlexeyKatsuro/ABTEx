@@ -15,5 +15,6 @@ class StorageModule {
     fun provideDatabase(context: Context): AppDataBase =
         Room.databaseBuilder(context, AppDataBase::class.java, AppDataBase::class.java.name).build()
 
-
+    @Provides
+    fun provideSensorDao(dataBase: AppDataBase) = dataBase.sensorsDao()
 }

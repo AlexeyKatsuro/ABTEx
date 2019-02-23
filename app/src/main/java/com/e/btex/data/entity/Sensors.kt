@@ -8,10 +8,8 @@ import com.e.btex.util.extensions.applyDispersion
 @Entity
 data class Sensors(
 
-    @PrimaryKey
-    val id: Long,
-    val time: Long,
 
+    val time: Long,
     val temperature: Float,
     val humidity: Float,
     val co2: Float,
@@ -20,6 +18,10 @@ data class Sensors(
     val pm25: Float,
     val tvoc: Float
 ) {
+
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+
     companion object {}
 }
 
@@ -36,8 +38,7 @@ fun Sensors.getSensorMap(): Map<SensorsType, Float> {
 }
 
 fun Sensors.Companion.getRandomValues(id: Long, time: Long): Sensors {
-    return Sensors(
-        id, time,
+    return Sensors(time,
         35.applyDispersion(0.3).toFloat(),
         45.applyDispersion(0.3).toFloat(),
         4000.applyDispersion(0.3).toFloat(),

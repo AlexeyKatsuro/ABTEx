@@ -5,6 +5,7 @@
 package com.e.btex.di
 
 import com.e.btex.base.BTExApp
+import com.e.btex.connection.ServiceBuilder
 import com.e.btex.di.modue.AppModule
 import com.e.btex.di.modue.StorageModule
 import com.e.btex.ui.MainBuilder
@@ -19,7 +20,8 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         AppModule::class,
         StorageModule::class,
-        MainBuilder::class
+        MainBuilder::class,
+        ServiceBuilder::class
     ]
 )
 interface AppComponent : AndroidInjector<BTExApp> {
