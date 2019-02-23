@@ -2,17 +2,17 @@ package com.e.btex.data
 
 import com.e.btex.util.extensions.applyDispersion
 
-data class Sensors(val temperature: Number,
-                   val humidity: Number,
-                   val co2: Number,
-                   val pm1: Number,
-                   val pm10: Number,
-                   val pm25: Number,
-                   val tvoc: Number){
+data class Sensors(val temperature: Float,
+                   val humidity: Float,
+                   val co2: Float,
+                   val pm1: Float,
+                   val pm10: Float,
+                   val pm25: Float,
+                   val tvoc: Float){
     companion object {}
 }
 
-fun Sensors.getSensorMap(): Map<SensorsType, Number> {
+fun Sensors.getSensorMap(): Map<SensorsType, Float> {
     return mapOf(
         SensorsType.temperature to temperature,
         SensorsType.humidity to humidity,
@@ -26,12 +26,12 @@ fun Sensors.getSensorMap(): Map<SensorsType, Number> {
 
 fun Sensors.Companion.getRandomValues(): Sensors {
     val rand =  Sensors(
-        35.applyDispersion(0.3),
-        45.applyDispersion(0.3),
-        4000.applyDispersion(0.3),
-        290.applyDispersion(0.3),
-        200.applyDispersion(0.3),
-        25.applyDispersion(0.3),
-        783.applyDispersion(0.3))
+        35.applyDispersion(0.3).toFloat(),
+        45.applyDispersion(0.3).toFloat(),
+        4000.applyDispersion(0.3).toFloat(),
+        290.applyDispersion(0.3).toFloat(),
+        200.applyDispersion(0.3).toFloat(),
+        25.applyDispersion(0.3).toFloat(),
+        783.applyDispersion(0.3).toFloat())
     return rand
 }

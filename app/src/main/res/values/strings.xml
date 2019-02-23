@@ -1,12 +1,29 @@
 <resources>
     <string name="app_name">BTEx</string>
     <string name="settings">Настройки</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="clear">Стереть</string>
+    <string name="paired_devices">Подключенные устройства</string>
+    <string name="no_data">Нет данных</string>
 
-    <string name="temperature_val">Температура: %1$s</string>
-    <string name="humidity_val">Влажность: %1$s</string>
-    <string name="co2_val">co2: %1$s</string>
-    <string name="pm1_val">pm1: %1$s</string>
-    <string name="pm10_val">pm10: %1$s</string>
-    <string name="pm25_val">pm25: %1$s</string>
-    <string name="tvoc_val">tvoc: %1$s</string>
+    <string name="error_bluetooth_not_supported">Невозоможно подключиться к Bluetooth</string>
+
+    <string name="temperature">Температура</string>
+    <string name="humidity">Влажность</string>
+    <string name="co2">co2</string>
+    <string name="pm1">pm1</string>
+    <string name="pm10">pm10</string>
+    <string name="pm25">pm25</string>
+    <string name="tvoc">tvoc</string>
+
+    <string name="sensor_val">%1$s: %2$.2f</string>
+
+    <string name="temperature_val">Температура: %1$.2f</string>
+    <string name="humidity_val">Влажность: %1$.2f</string>
+    <string name="co2_val">co2: %1$.2f</string>
+    <string name="pm1_val">pm1: %1$.2f</string>
+    <string name="pm10_val">pm10: %1$.2f</string>
+    <string name="pm25_val">pm25: %1$.2f</string>
+    <string name="tvoc_val">tvoc: %1$.2f</string>
+
 </resources>

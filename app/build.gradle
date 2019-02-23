@@ -27,6 +27,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+
 }
 
 dependencies {
@@ -56,4 +61,6 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
 }

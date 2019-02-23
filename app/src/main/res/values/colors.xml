@@ -2,4 +2,8 @@
 <resources>
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryVariant">#3700B3</color>
+
+    <color name="colorSecondary">#03DAC6</color>
+
+    <color name="gray_divider">#E6E2DC</color>
 </resources>

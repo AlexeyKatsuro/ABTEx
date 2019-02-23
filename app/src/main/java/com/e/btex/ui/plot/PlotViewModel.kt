@@ -22,9 +22,8 @@ class PlotViewModel @Inject constructor() : BaseViewModel() {
             withContext(Dispatchers.IO) {
                 while (true) {
                     _lastSensors.postValue(Sensors.getRandomValues())
-                    delay(3000)
+                    delay(1000)
                 }
-
             }
         }
     }

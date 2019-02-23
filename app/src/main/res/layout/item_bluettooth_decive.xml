@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="com.e.btex.data.BtDevice"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/margin_normal"
+        android:paddingStart="@dimen/margin_normal"
+        android:paddingTop="@dimen/margin_small"
+        android:paddingBottom="@dimen/margin_small"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:selectableItemBackground">
+        <TextView
+            android:id="@+id/name"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:text="@{item.name}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="MEIZU M6s"/>
+        <TextView
+            android:id="@+id/mac"
+            android:text="@{item.macAddress}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="FC:53:9E:3A:A1:78" />
+    </LinearLayout>
+</layout>
