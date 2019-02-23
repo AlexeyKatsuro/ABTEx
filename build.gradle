@@ -9,6 +9,7 @@ buildscript {
     ext.dagger = '2.21'
     ext.timber = '4.7.1'
     ext.coroutines = '1.1.1'
+    ext.room = '1.1.1'
 
     repositories {
         google()

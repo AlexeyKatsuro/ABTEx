@@ -7,7 +7,7 @@
 
         <variable
             name="sensors"
-            type="com.e.btex.data.Sensors" />
+            type="com.e.btex.data.entity.Sensors" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -5,6 +5,8 @@
 package com.e.btex.di
 
 import com.e.btex.base.BTExApp
+import com.e.btex.di.modue.AppModule
+import com.e.btex.di.modue.StorageModule
 import com.e.btex.ui.MainBuilder
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -16,6 +18,7 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         AppModule::class,
+        StorageModule::class,
         MainBuilder::class
     ]
 )

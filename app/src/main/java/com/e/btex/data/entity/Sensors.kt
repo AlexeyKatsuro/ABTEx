@@ -1,14 +1,25 @@
-package com.e.btex.data
+package com.e.btex.data.entity
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.e.btex.data.SensorsType
 import com.e.btex.util.extensions.applyDispersion
 
-data class Sensors(val temperature: Float,
-                   val humidity: Float,
-                   val co2: Float,
-                   val pm1: Float,
-                   val pm10: Float,
-                   val pm25: Float,
-                   val tvoc: Float){
+@Entity
+data class Sensors(
+
+    @PrimaryKey
+    val id: Long,
+    val time: Long,
+
+    val temperature: Float,
+    val humidity: Float,
+    val co2: Float,
+    val pm1: Float,
+    val pm10: Float,
+    val pm25: Float,
+    val tvoc: Float
+) {
     companion object {}
 }
 
@@ -24,14 +35,16 @@ fun Sensors.getSensorMap(): Map<SensorsType, Float> {
     )
 }
 
-fun Sensors.Companion.getRandomValues(): Sensors {
-    val rand =  Sensors(
+fun Sensors.Companion.getRandomValues(id: Long, time: Long): Sensors {
+    return Sensors(
+        id, time,
         35.applyDispersion(0.3).toFloat(),
         45.applyDispersion(0.3).toFloat(),
         4000.applyDispersion(0.3).toFloat(),
         290.applyDispersion(0.3).toFloat(),
         200.applyDispersion(0.3).toFloat(),
         25.applyDispersion(0.3).toFloat(),
-        783.applyDispersion(0.3).toFloat())
-    return rand
+        783.applyDispersion(0.3).toFloat()
+    )
+
 }

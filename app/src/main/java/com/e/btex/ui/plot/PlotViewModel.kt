@@ -3,8 +3,8 @@ package com.e.btex.ui.plot
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.e.btex.base.BaseViewModel
-import com.e.btex.data.Sensors
-import com.e.btex.data.getRandomValues
+import com.e.btex.data.entity.Sensors
+import com.e.btex.data.entity.getRandomValues
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,10 +20,11 @@ class PlotViewModel @Inject constructor() : BaseViewModel() {
     init {
         scope.launch {
             withContext(Dispatchers.IO) {
-                while (true) {
-                    _lastSensors.postValue(Sensors.getRandomValues())
-                    delay(1000)
-                }
+//                var count
+//                while (true) {
+//                    _lastSensors.postValue(Sensors.getRandomValues())
+//                    delay(1000)
+//                }
             }
         }
     }
