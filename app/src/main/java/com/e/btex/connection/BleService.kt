@@ -5,9 +5,15 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
+import android.os.ResultReceiver
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import com.e.btex.data.BtDevice
+import com.e.btex.data.ServiceState
+import com.e.btex.data.commands.OutCommand
+import com.e.btex.data.commands.SyncCommand
 import com.e.btex.data.getRemoteDevice
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -48,24 +54,34 @@ class BleService : IntentService(BleService::class.java.simpleName) {
     private lateinit var inputStream: InputStream
     private lateinit var outputStream: OutputStream
 
+    private lateinit var receiver: ResultReceiver
+
 
     override fun onHandleIntent(intent: Intent) {
         Timber.d("onHandleIntent")
         device = intent.getParcelableExtra(ARG_DEVICE)
-
+        receiver = intent.getParcelableExtra(ARG_RESULT_RECEIVER)
+        sendMessage(ServiceState.OnStartConnecting)
         if (!connect(device)) {
+            sendMessage(ServiceState.OnFailedConnecting)
             return
         }
-
-        scope.launch {
-            withContext(Dispatchers.IO) {
+        sync()
+        sendMessage(ServiceState.OnCreateConnection)
+        runBlocking {
+           withContext(Dispatchers.IO) {
                 val buffer = ByteArray(1024)
                 var bytes: Int
                 while (true) {
                     try {
                         bytes = inputStream.read(buffer)
-                        Timber.d("receive $bytes bytes")
+                        val data = bundleOf(
+                            BleResultReceiver.PARAM_DATA to buffer,
+                            BleResultReceiver.PARAM_DATA_SIZE to bytes)
+
+                        sendMessage(ServiceState.OnReceiveData,data)
                     } catch (e: Exception) {
+                        sendMessage(ServiceState.OnDestroyConnection)
                         break
                     }
                 }
@@ -122,4 +138,19 @@ class BleService : IntentService(BleService::class.java.simpleName) {
         }
     }
 
+    private fun sendMessage(state: ServiceState, data: Bundle = bundleOf()){
+        receiver.send(state.ordinal, data)
+    }
+
+    fun write(bytes: ByteArray){
+        outputStream.write(bytes)
+    }
+
+    fun sendCommand(command: OutCommand){
+        write(command.bytes)
+    }
+
+    private fun sync(){
+        sendCommand(SyncCommand())
+    }
 }

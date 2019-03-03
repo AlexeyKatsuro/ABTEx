@@ -6,7 +6,7 @@
     <string name="paired_devices">Подключенные устройства</string>
     <string name="no_data">Нет данных</string>
 
-    <string name="error_bluetooth_not_supported">Невозоможно подключиться к Bluetooth</string>
+    <string name="error_bluetooth_unavailable">Невозоможно подключиться к Bluetooth</string>
 
     <string name="temperature">Температура</string>
     <string name="humidity">Влажность</string>

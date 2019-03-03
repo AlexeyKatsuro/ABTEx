@@ -1,20 +1,25 @@
 package com.e.btex.ui.plot
 
+import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
-import com.e.btex.connection.SensorService
+import com.e.btex.data.BtDevice
+import com.e.btex.data.mapToBtDevice
 import com.e.btex.databinding.FragmentPlotBinding
-import com.e.btex.util.extensions.ctx
+import com.e.btex.util.EventObserver
+import com.e.btex.util.extensions.executeAfter
+import com.e.btex.util.extensions.toast
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.reflect.KClass
 
 
@@ -26,12 +31,9 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
     override val layoutId: Int
         get() = R.layout.fragment_plot
 
+    private val bleAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        //SensorService.startService(ctx)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
@@ -60,7 +62,23 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val current = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
+        viewModel.loadTargetAddress()
 
+
+        viewModel.targetAddress.observe(this, EventObserver {
+            if (it.isNullOrEmpty()) {
+                navController.navigate(R.id.showSettingsFragment)
+            } else {
+                val device: BtDevice = bleAdapter.getRemoteDevice(it).mapToBtDevice()
+                binding.executeAfter {
+                    this.device = device
+                }
+
+                viewModel.initConnection(device)
+            }
+        })
+
+        viewModel.lastSensors
 
 //        viewModel.lastSensors.observe(this, Observer {
 //            binding.executeAfter {

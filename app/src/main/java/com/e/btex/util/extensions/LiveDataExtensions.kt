@@ -20,6 +20,12 @@ fun <X, Y> LiveData<X>.map(body: (X) -> Y): LiveData<Y> {
     return Transformations.map(this, body)
 }
 
+fun <X, Y> LiveData<X>.mapToEvent(body: (X) -> Y): LiveData<Event<Y>> {
+    return Transformations.map(this){
+        Event(body(it))
+    }
+}
+
 /** Uses `Transformations.switchMap` on a LiveData */
 fun <X, Y> LiveData<X>.switchMap(body: (X) -> LiveData<Y>): LiveData<Y> {
     return Transformations.switchMap(this, body)
@@ -39,4 +45,8 @@ fun <T> MutableLiveData<Event<T>>.postEventValue(value: T) {
 
 fun <T> MutableLiveData<Event<T>>.setEventValue(value: T) {
     setValue(Event(value))
+}
+
+fun MutableLiveData<Unit>.trigger() {
+    value = Unit
 }

@@ -3,7 +3,7 @@ package com.e.btex.connection
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
-import com.e.btex.data.ServcieState.*
+import com.e.btex.data.ServiceState.*
 
 class BleResultReceiver(handler: Handler, private val callback: ServiceStateCallback) : ResultReceiver(handler) {
 

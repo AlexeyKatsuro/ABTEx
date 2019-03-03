@@ -1,7 +1,7 @@
 package com.e.btex.data.repository
 
 import androidx.lifecycle.LiveData
-import com.e.btex.data.dao.SensorsDao
+import com.e.btex.data.BtDevice
 import com.e.btex.data.entity.Sensors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -10,38 +10,43 @@ import javax.inject.Singleton
 
 @Singleton
 class SensorsRepository @Inject constructor(
-    private val sensorsDao: SensorsDao
+    private val dataBaseDataSource: DataBaseDataSource,
+    private val bluetoothDataSource: BluetoothDataSource
 ) {
 
-    fun getAllSernsorsLifeDate(): LiveData<List<Sensors>> = sensorsDao.getAllSernsorsLifeDate()
+    fun getAllSensorsLiveDate(): LiveData<List<Sensors>> = dataBaseDataSource.getAllSensorsLiveDate()
 
     suspend fun getAllSernsors(): List<Sensors> {
         return withContext(Dispatchers.IO) {
-            sensorsDao.getAllSernsors()
+            dataBaseDataSource.getAllSernsors()
         }
     }
 
     suspend fun getInTimeRange(from: Long, to: Long): List<Sensors> {
         return withContext(Dispatchers.IO) {
-            sensorsDao.getInTimeRange(from, to)
+            dataBaseDataSource.getInTimeRange(from, to)
         }
     }
 
     suspend fun insertAll(vararg sensors: Sensors) {
         withContext(Dispatchers.IO){
-            sensorsDao.insertAll(*sensors)
+            dataBaseDataSource.insertAll(*sensors)
         }
     }
 
     suspend fun wipe() {
         withContext(Dispatchers.IO) {
-            sensorsDao.wipe()
+            dataBaseDataSource.wipe()
         }
     }
 
     suspend fun getLastId(): Int {
         return withContext(Dispatchers.IO) {
-            sensorsDao.getLastId()
+            dataBaseDataSource.getLastId()
         }
+    }
+
+    fun initConnection(device: BtDevice) {
+        bluetoothDataSource.initConnection(device)
     }
 }

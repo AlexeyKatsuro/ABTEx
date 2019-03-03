@@ -8,6 +8,10 @@
         <variable
             name="sensors"
             type="com.e.btex.data.entity.Sensors" />
+
+        <variable
+            name="device"
+            type="com.e.btex.data.BtDevice"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -24,7 +28,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/app_name" />
+                app:title="@{device.name}"
+                app:subtitle="@{device.macAddress}"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

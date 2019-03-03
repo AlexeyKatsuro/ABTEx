@@ -12,4 +12,4 @@ fun BtDevice.getRemoteDevice(adapter: BluetoothAdapter): BluetoothDevice {
     return adapter.getRemoteDevice(macAddress)
 }
 
- fun BluetoothDevice.mapToBtDevice(): BtDevice = BtDevice(name,address)
+fun BluetoothDevice.mapToBtDevice(): BtDevice = BtDevice(name ?: "Device",address)

@@ -1,6 +1,6 @@
 package com.e.btex.data
 
-enum class ServcieState {
+enum class ServiceState {
     OnStartConnecting,
     OnFailedConnecting,
     OnCreateConnection,
