@@ -3,20 +3,45 @@ package com.e.btex.data.repository
 import androidx.lifecycle.LiveData
 import com.e.btex.data.dao.SensorsDao
 import com.e.btex.data.entity.Sensors
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SensorsRepository @Inject constructor(
-        private val sensorsDao: SensorsDao
+    private val sensorsDao: SensorsDao
 ) {
-    fun getAllSernsors(): LiveData<List<Sensors>> = sensorsDao.getAllSernsors()
 
-    fun getInTimeRange(from: Long, to: Long): LiveData<List<Sensors>> = sensorsDao.getInTimeRange(from, to)
+    fun getAllSernsorsLifeDate(): LiveData<List<Sensors>> = sensorsDao.getAllSernsorsLifeDate()
 
-    fun insertAll(vararg sensors: Sensors) = sensorsDao.insertAll(*sensors)
+    suspend fun getAllSernsors(): List<Sensors> {
+        return withContext(Dispatchers.IO) {
+            sensorsDao.getAllSernsors()
+        }
+    }
 
-    fun wipe() = sensorsDao.wipe()
+    suspend fun getInTimeRange(from: Long, to: Long): List<Sensors> {
+        return withContext(Dispatchers.IO) {
+            sensorsDao.getInTimeRange(from, to)
+        }
+    }
 
-    fun getLastId(): Int = sensorsDao.getLastId()
+    suspend fun insertAll(vararg sensors: Sensors) {
+        withContext(Dispatchers.IO){
+            sensorsDao.insertAll(*sensors)
+        }
+    }
+
+    suspend fun wipe() {
+        withContext(Dispatchers.IO) {
+            sensorsDao.wipe()
+        }
+    }
+
+    suspend fun getLastId(): Int {
+        return withContext(Dispatchers.IO) {
+            sensorsDao.getLastId()
+        }
+    }
 }

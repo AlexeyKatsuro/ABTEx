@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
+import com.e.btex.connection.BleService
+import com.e.btex.connection.ServiceStateCallback
 import com.e.btex.data.BtDevice
 import com.e.btex.databinding.FragmentSettingsBinding
 import com.e.btex.databinding.ItemBluettoothDeciveBinding
@@ -26,6 +28,8 @@ import kotlin.reflect.KClass
 
 
 class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel>() {
+
+
 
     override val viewModelClass: KClass<SettingsViewModel>
         get() = SettingsViewModel::class
@@ -66,7 +70,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
 
         pairDeviceAdapter  = DataBoundAdapter(R.layout.item_bluettooth_decive, BtDevice::macAddress)
         pairDeviceAdapter.setOnItemClickListener { _, _, item ->
-            toast(item.name)
+          //  BleService.startService(act.applicationContext,item)
         }
 
 

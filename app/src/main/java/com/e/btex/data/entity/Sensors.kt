@@ -18,7 +18,7 @@ data class Sensors(
     val pm25: Float,
     val tvoc: Float
 ) {
-
+    //TODO remove autoGenerate, and get Id from Sensor
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 

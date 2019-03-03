@@ -10,11 +10,17 @@ import com.e.btex.data.entity.Sensors
 interface SensorsDao {
 
 
+    @Query("SELECT * FROM Sensors WHERE time >= :from AND time < :to")
+    fun getInTimeRangeLifeDate(from: Long, to: Long): LiveData<List<Sensors>>
+
     @Query("SELECT * FROM sensors")
-    fun getAllSernsors(): LiveData<List<Sensors>>
+    fun getAllSernsorsLifeDate(): LiveData<List<Sensors>>
+
+    @Query("SELECT * FROM sensors")
+    fun getAllSernsors(): List<Sensors>
 
     @Query("SELECT * FROM Sensors WHERE time >= :from AND time < :to")
-    fun getInTimeRange(from: Long, to: Long): LiveData<List<Sensors>>
+    fun getInTimeRange(from: Long, to: Long): List<Sensors>
 
     @Insert
     fun insertAll(vararg sensors: Sensors)

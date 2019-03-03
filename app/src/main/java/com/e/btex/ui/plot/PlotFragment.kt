@@ -30,7 +30,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SensorService.startService(ctx)
+        //SensorService.startService(ctx)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
