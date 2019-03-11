@@ -1,4 +1,4 @@
-package com.e.btex.data.commands
+package com.e.btex.data.protocol.commands
 
 import java.nio.ByteBuffer
 import java.nio.ByteOrder

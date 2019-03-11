@@ -3,13 +3,13 @@ package com.e.btex.connection
 import android.os.Bundle
 import android.os.Handler
 import android.os.ResultReceiver
-import com.e.btex.data.ServiceState.*
+import com.e.btex.data.ServiceStates.*
+import com.e.btex.data.protocol.RemoteData
 
 class BleResultReceiver(handler: Handler, private val callback: ServiceStateCallback) : ResultReceiver(handler) {
 
     companion object {
         const val PARAM_DATA = "param_data"
-        const val PARAM_DATA_SIZE = "param_data_size"
     }
 
 
@@ -30,9 +30,8 @@ class BleResultReceiver(handler: Handler, private val callback: ServiceStateCall
                 callback.onFailedConnecting()
             }
             OnReceiveData -> {
-                val data = resultData.getByteArray(PARAM_DATA)!!
-                val size = resultData.getInt(PARAM_DATA_SIZE)
-                callback.onReceiveData(data,size)
+                val data = resultData.getParcelable<RemoteData>(PARAM_DATA)!!
+                callback.onReceiveData(data)
             }
         }
     }

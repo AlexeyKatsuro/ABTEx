@@ -3,12 +3,12 @@ package com.e.btex.data.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.e.btex.data.SensorsType
+import com.e.btex.data.protocol.RemoteData
 import com.e.btex.util.extensions.applyDispersion
+import kotlinx.android.parcel.Parcelize
 
 @Entity
 data class Sensors(
-
-
     val time: Long,
     val temperature: Float,
     val humidity: Float,
@@ -17,12 +17,12 @@ data class Sensors(
     val pm10: Float,
     val pm25: Float,
     val tvoc: Float
-) {
+){
     //TODO remove autoGenerate, and get Id from Sensor
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 
-    companion object {}
+    companion object
 }
 
 fun Sensors.getSensorMap(): Map<SensorsType, Float> {

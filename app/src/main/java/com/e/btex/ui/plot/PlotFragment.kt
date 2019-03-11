@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
-import com.e.btex.data.BtDevice
-import com.e.btex.data.mapToBtDevice
+import com.e.btex.data.ServiceState
+import com.e.btex.data.entity.Sensors
 import com.e.btex.databinding.FragmentPlotBinding
 import com.e.btex.util.EventObserver
 import com.e.btex.util.extensions.executeAfter
@@ -19,7 +22,6 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
 
@@ -34,7 +36,6 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
     private val bleAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
@@ -42,12 +43,16 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             inflateMenu(R.menu.menu_main)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.action_settings -> {
+                    R.id.action_device_settings -> {
                         navController.navigate(R.id.showSettingsFragment)
                         true
                     }
-                    R.id.action_clear -> {
-                        clearChart()
+                    R.id.action_refresh -> {
+                        viewModel.refreshConnection()
+                        true
+                    }
+                    R.id.action_turn_off ->{
+                        viewModel.closeConnection()
                         true
                     }
                     else -> false
@@ -63,31 +68,33 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         val current = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
         viewModel.loadTargetAddress()
+        viewModel.getLastSensors()
 
+        viewModel.targetDevice.observe(this, EventObserver {
+            if (it == null) {
 
-        viewModel.targetAddress.observe(this, EventObserver {
-            if (it.isNullOrEmpty()) {
                 navController.navigate(R.id.showSettingsFragment)
             } else {
-                val device: BtDevice = bleAdapter.getRemoteDevice(it).mapToBtDevice()
                 binding.executeAfter {
-                    this.device = device
+                    this.device = it
                 }
-
-                viewModel.initConnection(device)
+                viewModel.initConnection(it)
             }
         })
 
-        viewModel.lastSensors
+        viewModel.connectionState.observe(this, EventObserver {
+            updateUI(it)
+        })
 
-//        viewModel.lastSensors.observe(this, Observer {
-//            binding.executeAfter {
-//                sensors = it
+
+        viewModel.lastSensors.observe(this, Observer {
+            binding.executeAfter {
+                sensors = it
 //                val now = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - current
 //                Timber.e("$now")
 //                addNewSensorVal(it.temperature, now)
-//            }
-//        })
+            }
+        })
     }
 
     private fun setUpChart(chart: LineChart) {
@@ -161,9 +168,46 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         return set
     }
 
-    private fun clearChart() {
-        binding.chart.clear()
-        setUpChart(binding.chart)
+
+    private fun updateUI(state: ServiceState) {
+        updateToolbar(binding.toolbar, state)
+
+        when (state) {
+            is ServiceState.OnStartConnecting -> {
+            }
+            is ServiceState.OnFailedConnecting -> {
+                toast(R.string.error_device_connection)
+            }
+
+            is ServiceState.OnCreateConnection -> {
+                toast(R.string.state_connected)
+            }
+
+            is ServiceState.OnDestroyConnection -> {
+
+            }
+        }
     }
+
+    private fun updateToolbar(toolbar: Toolbar, state: ServiceState) {
+        toolbar.menu.findItem(R.id.action_refresh).isVisible =
+            state is ServiceState.OnFailedConnecting || state is ServiceState.OnDestroyConnection
+
+        when (state) {
+            is ServiceState.OnStartConnecting -> {
+                toolbar.subtitle = getString(R.string.state_connecting)
+            }
+
+            is ServiceState.OnDestroyConnection,
+            is ServiceState.OnFailedConnecting -> {
+                toolbar.subtitle = getString(R.string.state_offline)
+            }
+
+            is ServiceState.OnCreateConnection -> {
+                toolbar.subtitle = getString(R.string.state_online)
+            }
+        }
+    }
+
 
 }

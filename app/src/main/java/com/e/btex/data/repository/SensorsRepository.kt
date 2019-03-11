@@ -2,7 +2,9 @@ package com.e.btex.data.repository
 
 import androidx.lifecycle.LiveData
 import com.e.btex.data.BtDevice
+import com.e.btex.data.ServiceState
 import com.e.btex.data.entity.Sensors
+import com.e.btex.util.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -46,7 +48,15 @@ class SensorsRepository @Inject constructor(
         }
     }
 
-    fun initConnection(device: BtDevice) {
-        bluetoothDataSource.initConnection(device)
+    fun initConnection(device: BtDevice): LiveData<Event<ServiceState>> {
+       return bluetoothDataSource.initConnection(device)
+    }
+
+    fun closeConnection() {
+        bluetoothDataSource.closeConnection()
+    }
+
+    fun getLastSensors(): LiveData<Sensors> {
+       return bluetoothDataSource.getLastSensors()
     }
 }

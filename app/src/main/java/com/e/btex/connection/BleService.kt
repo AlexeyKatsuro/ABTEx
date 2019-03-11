@@ -11,11 +11,15 @@ import android.os.ResultReceiver
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import com.e.btex.data.BtDevice
-import com.e.btex.data.ServiceState
-import com.e.btex.data.commands.OutCommand
-import com.e.btex.data.commands.SyncCommand
+import com.e.btex.data.ServiceStates
+import com.e.btex.data.protocol.commands.OutCommand
+import com.e.btex.data.protocol.commands.SyncCommand
 import com.e.btex.data.getRemoteDevice
-import kotlinx.coroutines.*
+import com.e.btex.data.protocol.DataState
+import com.e.btex.data.protocol.ProtocolDataParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import timber.log.Timber
 import java.io.InputStream
 import java.io.OutputStream
@@ -56,35 +60,39 @@ class BleService : IntentService(BleService::class.java.simpleName) {
 
     private lateinit var receiver: ResultReceiver
 
+    private val parser = ProtocolDataParser()
+
 
     override fun onHandleIntent(intent: Intent) {
         Timber.d("onHandleIntent")
         device = intent.getParcelableExtra(ARG_DEVICE)
         receiver = intent.getParcelableExtra(ARG_RESULT_RECEIVER)
-        sendMessage(ServiceState.OnStartConnecting)
+        sendMessage(ServiceStates.OnStartConnecting)
         if (!connect(device)) {
-            sendMessage(ServiceState.OnFailedConnecting)
+            sendMessage(ServiceStates.OnFailedConnecting)
             return
         }
         sync()
-        sendMessage(ServiceState.OnCreateConnection)
-        runBlocking {
-           withContext(Dispatchers.IO) {
-                val buffer = ByteArray(1024)
-                var bytes: Int
-                while (true) {
-                    try {
-                        bytes = inputStream.read(buffer)
-                        val data = bundleOf(
-                            BleResultReceiver.PARAM_DATA to buffer,
-                            BleResultReceiver.PARAM_DATA_SIZE to bytes)
+        sendMessage(ServiceStates.OnCreateConnection)
+        val buffer = ByteArray(1024)
+        var bytes: Int
+        while (true) {
+            try {
+                bytes = inputStream.read(buffer)
 
-                        sendMessage(ServiceState.OnReceiveData,data)
-                    } catch (e: Exception) {
-                        sendMessage(ServiceState.OnDestroyConnection)
-                        break
+                val dataState = parser.parse(buffer, bytes)
+                dataState?.let {
+                    if(it is DataState.Success){
+                        val data = bundleOf(BleResultReceiver.PARAM_DATA to it.data)
+                        Timber.e("${it.data}")
+                        sendMessage(ServiceStates.OnReceiveData, data)
                     }
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                sendMessage(ServiceStates.OnDestroyConnection)
+                break
             }
         }
     }
@@ -122,6 +130,7 @@ class BleService : IntentService(BleService::class.java.simpleName) {
             true
 
         } catch (e: Exception) {
+            e.printStackTrace()
             Timber.d("Connection error to device: $device")
             false
         }
@@ -133,24 +142,25 @@ class BleService : IntentService(BleService::class.java.simpleName) {
             outputStream.close()
             socket.close()
         } catch (e: Exception) {
+            e.printStackTrace()
         } finally {
             Timber.d("Connection closed")
         }
     }
 
-    private fun sendMessage(state: ServiceState, data: Bundle = bundleOf()){
+    private fun sendMessage(state: ServiceStates, data: Bundle = bundleOf()) {
         receiver.send(state.ordinal, data)
     }
 
-    fun write(bytes: ByteArray){
+    fun write(bytes: ByteArray) {
         outputStream.write(bytes)
     }
 
-    fun sendCommand(command: OutCommand){
+    fun sendCommand(command: OutCommand) {
         write(command.bytes)
     }
 
-    private fun sync(){
+    private fun sync() {
         sendCommand(SyncCommand())
     }
 }

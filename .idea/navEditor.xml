@@ -8,7 +8,7 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
-                  <entry key="mainFragment">
+                  <entry key="plotFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -19,7 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_mainFragment_to_settingFragment">
+                            <entry key="showSettingsFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -29,13 +29,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="settingFragment">
+                  <entry key="settingsFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="270" />
-                            <option name="y" value="11" />
+                            <option name="x" value="256" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>

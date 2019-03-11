@@ -1,4 +1,4 @@
-package com.e.btex.data.commands
+package com.e.btex.data.protocol.commands
 
 import com.e.btex.util.UnixTimeUtils
 import java.nio.ByteBuffer

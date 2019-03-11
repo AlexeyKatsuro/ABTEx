@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/plotFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/plotFragment"
         android:name="com.e.btex.ui.plot.PlotFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_plot">

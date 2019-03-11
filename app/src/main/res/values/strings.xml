@@ -2,11 +2,23 @@
     <string name="app_name">BTEx</string>
     <string name="settings">Настройки</string>
     <string name="bluetooth">Bluetooth</string>
+    <string name="ble_devices">Устройства</string>
+
+    <string name="connect">Подключится</string>
+    <string name="refresh">Перезагрузить</string>
+    <string name="turn_off">Отключится</string>
     <string name="clear">Стереть</string>
+
     <string name="paired_devices">Подключенные устройства</string>
     <string name="no_data">Нет данных</string>
 
+    <string name="state_connecting">Подключение…</string>
+    <string name="state_connected">Подключено</string>
+    <string name="state_online">Online</string>
+    <string name="state_offline">Offline</string>
+
     <string name="error_bluetooth_unavailable">Невозоможно подключиться к Bluetooth</string>
+    <string name="error_device_connection">Ошибка подключения</string>
 
     <string name="temperature">Температура</string>
     <string name="humidity">Влажность</string>

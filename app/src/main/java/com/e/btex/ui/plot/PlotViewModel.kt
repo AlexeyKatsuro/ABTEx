@@ -1,9 +1,11 @@
 package com.e.btex.ui.plot
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.e.btex.base.BaseViewModel
 import com.e.btex.data.BtDevice
+import com.e.btex.data.ServiceState
 import com.e.btex.data.entity.Sensors
 import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.data.repository.SensorsRepository
@@ -18,32 +20,53 @@ class PlotViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository
 ) : BaseViewModel() {
 
-    private val _lastSensors = MutableLiveData<Sensors>()
-    val lastSensors: LiveData<Sensors>
-        get() = _lastSensors
+    private val loadLastSensors = MutableLiveData<Unit>()
+
+    val lastSensors = sensorsRepository.getLastSensors()
 
 
     private val loadDataTrigger = MutableLiveData<Unit>()
-    val allSensors : LiveData<List<Sensors>> = loadDataTrigger.switchMap {
+    val allSensors: LiveData<List<Sensors>> = loadDataTrigger.switchMap {
         sensorsRepository.getAllSensorsLiveDate()
     }
 
-    private val loadAderssTrigger = MutableLiveData<Unit>()
-    val targetAddress: LiveData<Event<String?>> = loadAderssTrigger.mapToEvent {
-        deviceRepository.getTargetAddress()
+
+
+    private val loadDeviceTrigger = MutableLiveData<Unit>()
+    val targetDevice: LiveData<Event<BtDevice?>> = loadDeviceTrigger.mapToEvent {
+        deviceRepository.getTargetBtDevice()
     }
+    private val connectionTrigger = MutableLiveData<BtDevice>()
+    val connectionState: LiveData<Event<ServiceState>> =
+        connectionTrigger.switchMap {
+            sensorsRepository.initConnection(it)
+        }
 
     init {
-       loadDataTrigger.trigger()
-
+        loadDataTrigger.trigger()
     }
 
-    fun loadTargetAddress(){
-        loadAderssTrigger.trigger()
+    fun loadTargetAddress() {
+        loadDeviceTrigger.trigger()
     }
 
     fun initConnection(device: BtDevice) {
-       sensorsRepository.initConnection(device)
+        connectionTrigger.value = device
+    }
+
+    fun refreshConnection() {
+        val device = deviceRepository.getTargetBtDevice()
+        device?.let {
+            initConnection(it)
+        }
+    }
+
+    fun closeConnection() {
+        sensorsRepository.closeConnection()
+    }
+
+    fun getLastSensors(){
+        loadLastSensors.trigger()
     }
 
 }

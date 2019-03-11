@@ -23,7 +23,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context) : Preference
     private val prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
 
 
-    override var targetDeviceAddress by StringPreference(prefs, PREFS_TARGET_ADDRESS, "")
+    override var targetDeviceAddress by StringPreference(prefs, PREFS_TARGET_ADDRESS, null)
     
     companion object {
         const val PREFS_NAME = "BTEx"
