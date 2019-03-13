@@ -28,34 +28,34 @@ class BluetoothDataSource @Inject constructor(
     private val sensorsMapper: SensorsMapper
 ) {
 
-    private val state = MutableLiveData<Event<ServiceState>>()
+    private val state = MutableLiveData<ServiceState>()
 
     private val bleAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
     val callback = object : ServiceStateCallback {
         override fun onStartConnecting() {
             Timber.d("onStartConnecting")
-            state.postEventValue(ServiceState.OnStartConnecting)
+            state.postValue(ServiceState.OnStartConnecting)
         }
 
         override fun onFailedConnecting() {
             Timber.d("onFailedConnecting")
-            state.postEventValue(ServiceState.OnFailedConnecting)
+            state.postValue(ServiceState.OnFailedConnecting)
         }
 
         override fun onCreateConnection() {
             Timber.d("onCreateConnection")
-            state.postEventValue(ServiceState.OnCreateConnection)
+            state.postValue(ServiceState.OnCreateConnection)
         }
 
         override fun onDestroyConnection() {
             Timber.d("onDestroyConnection")
-            state.postEventValue(ServiceState.OnDestroyConnection)
+            state.postValue(ServiceState.OnDestroyConnection)
         }
 
         override fun onReceiveData(data: RemoteData) {
             Timber.d("onReceiveData")
-            state.postEventValue(ServiceState.OnReceiveData(data))
+            state.postValue(ServiceState.OnReceiveData(data))
         }
 
     }
@@ -64,7 +64,7 @@ class BluetoothDataSource @Inject constructor(
         return bleAdapter.getRemoteDevice(address).mapToBtDevice()
     }
 
-    fun initConnection(device: BtDevice): LiveData<Event<ServiceState>> {
+    fun initConnection(device: BtDevice): LiveData<ServiceState> {
         if (BleService.instance == null) {
             BleService.startService(context, device, callback)
         }
@@ -77,13 +77,16 @@ class BluetoothDataSource @Inject constructor(
 
     fun getLastSensors():  LiveData<Sensors>{
         return MediatorLiveData<Sensors>().apply {
-            addSource(state) {
-                val state = it.content
+            addSource(state) {state ->
                 if (state is ServiceState.OnReceiveData && state.data is StatusData){
                     val sensors: Sensors = sensorsMapper.map(state.data.sensors)
                     this.postValue(sensors)
                 }
             }
         }
+    }
+
+    fun readLogs(fromId: Int, toId: Int){
+        BleService.instance?.readLogs(fromId, toId)
     }
 }

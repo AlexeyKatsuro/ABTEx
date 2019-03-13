@@ -48,7 +48,7 @@ class SensorsRepository @Inject constructor(
         }
     }
 
-    fun initConnection(device: BtDevice): LiveData<Event<ServiceState>> {
+    fun initConnection(device: BtDevice): LiveData<ServiceState> {
        return bluetoothDataSource.initConnection(device)
     }
 
@@ -58,5 +58,9 @@ class SensorsRepository @Inject constructor(
 
     fun getLastSensors(): LiveData<Sensors> {
        return bluetoothDataSource.getLastSensors()
+    }
+
+    fun readLogs(fromId: Int, toId: Int) {
+        bluetoothDataSource.readLogs(fromId, toId)
     }
 }

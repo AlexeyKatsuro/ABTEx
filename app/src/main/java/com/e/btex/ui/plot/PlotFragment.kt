@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import com.e.btex.R
@@ -60,6 +61,10 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             }
         }
 
+        binding.buttonRead.setOnClickListener {
+            viewModel.loadLastData()
+        }
+
         setUpChart(binding.chart)
         return view
     }
@@ -82,10 +87,13 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             }
         })
 
-        viewModel.connectionState.observe(this, EventObserver {
+        viewModel.connectionState.observe(this, Observer {
             updateUI(it)
         })
 
+        viewModel.status.observe(this, Observer {
+            binding.buttonRead.isVisible = true
+        })
 
         viewModel.lastSensors.observe(this, Observer {
             binding.executeAfter {

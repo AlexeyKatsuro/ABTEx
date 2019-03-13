@@ -17,6 +17,7 @@ import com.e.btex.data.protocol.commands.SyncCommand
 import com.e.btex.data.getRemoteDevice
 import com.e.btex.data.protocol.DataState
 import com.e.btex.data.protocol.ProtocolDataParser
+import com.e.btex.data.protocol.commands.ReadCommand
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -86,6 +87,9 @@ class BleService : IntentService(BleService::class.java.simpleName) {
                         val data = bundleOf(BleResultReceiver.PARAM_DATA to it.data)
                         Timber.e("${it.data}")
                         sendMessage(ServiceStates.OnReceiveData, data)
+                    }
+                    if (it is DataState.IsLoading){
+                        Timber.e("Loading ${it.progress}%")
                     }
                 }
 
@@ -160,7 +164,11 @@ class BleService : IntentService(BleService::class.java.simpleName) {
         write(command.bytes)
     }
 
-    private fun sync() {
+    fun sync() {
         sendCommand(SyncCommand())
+    }
+
+    fun readLogs(fromId: Int, toId: Int){
+        sendCommand(ReadCommand(fromId, toId))
     }
 }

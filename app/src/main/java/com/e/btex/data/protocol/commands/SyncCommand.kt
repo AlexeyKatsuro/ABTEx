@@ -8,7 +8,7 @@ class SyncCommand : OutCommand() {
     override val code: Byte
         get() = 0
 
-    override fun fillBody(b: ByteBuffer) {
-        b.putInt(UnixTimeUtils.currentUnixTime)
+    override fun fillBody(buffer: ByteBuffer) {
+        buffer.putInt(UnixTimeUtils.currentUnixTime)
     }
 }

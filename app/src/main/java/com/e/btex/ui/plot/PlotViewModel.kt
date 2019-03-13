@@ -7,6 +7,7 @@ import com.e.btex.base.BaseViewModel
 import com.e.btex.data.BtDevice
 import com.e.btex.data.ServiceState
 import com.e.btex.data.entity.Sensors
+import com.e.btex.data.entity.StatusData
 import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.data.repository.SensorsRepository
 import com.e.btex.util.Event
@@ -24,6 +25,9 @@ class PlotViewModel @Inject constructor(
 
     val lastSensors = sensorsRepository.getLastSensors()
 
+    private val _status = MediatorLiveData<StatusData>()
+    val status: LiveData<StatusData>
+        get() = _status
 
     private val loadDataTrigger = MutableLiveData<Unit>()
     val allSensors: LiveData<List<Sensors>> = loadDataTrigger.switchMap {
@@ -31,19 +35,24 @@ class PlotViewModel @Inject constructor(
     }
 
 
-
     private val loadDeviceTrigger = MutableLiveData<Unit>()
     val targetDevice: LiveData<Event<BtDevice?>> = loadDeviceTrigger.mapToEvent {
         deviceRepository.getTargetBtDevice()
     }
     private val connectionTrigger = MutableLiveData<BtDevice>()
-    val connectionState: LiveData<Event<ServiceState>> =
+    val connectionState: LiveData<ServiceState> =
         connectionTrigger.switchMap {
             sensorsRepository.initConnection(it)
         }
 
     init {
         loadDataTrigger.trigger()
+
+        _status.addSource(connectionState) {
+            if (it is ServiceState.OnReceiveData && it.data is StatusData) {
+                _status.value = it.data
+            }
+        }
     }
 
     fun loadTargetAddress() {
@@ -65,8 +74,18 @@ class PlotViewModel @Inject constructor(
         sensorsRepository.closeConnection()
     }
 
-    fun getLastSensors(){
+    fun getLastSensors() {
         loadLastSensors.trigger()
+    }
+
+    fun readLogs(fromId: Int, toId: Int) {
+        sensorsRepository.readLogs(fromId, toId)
+    }
+
+    fun loadLastData() {
+        status.value?.let {
+            sensorsRepository.readLogs(0, it.lastLogId)
+        }
     }
 
 }

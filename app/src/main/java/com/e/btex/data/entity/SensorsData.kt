@@ -8,8 +8,8 @@ data class SensorsData(
     val humidity: Short,
     val co2: Short,
     val pm1: Short,
-    val pm10: Short,
     val pm25: Short,
+    val pm10: Short,
     val tvoc: Short
 ) : Parcelable
 
