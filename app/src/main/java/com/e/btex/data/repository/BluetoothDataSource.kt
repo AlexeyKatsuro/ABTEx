@@ -76,7 +76,7 @@ class BluetoothDataSource @Inject constructor(
         return MediatorLiveData<Sensors>().apply {
             addSource(state) {state ->
                 if (state is ServiceState.OnReceiveData && state.data is StatusData){
-                    val sensors: Sensors = sensorsMapper.map(state.data.sensors)
+                    val sensors: Sensors = sensorsMapper.map(state.data)
                     this.postValue(sensors)
                 }
             }

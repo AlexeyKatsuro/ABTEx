@@ -12,14 +12,26 @@ import com.e.btex.connection.bleservice.BleService
 import com.e.btex.connection.bleservice.BleServiceLifeCycle
 import com.e.btex.data.BtDevice
 import com.e.btex.data.ServiceStates
+import com.e.btex.data.dao.SensorsDao
+import com.e.btex.data.entity.ArrayLogData
+import com.e.btex.data.mappers.RangeSensorMapper
 import com.e.btex.data.protocol.DataState
 import com.e.btex.data.protocol.ProtocolDataParser
+import com.e.btex.data.protocol.RemoteData
 import com.e.btex.data.protocol.commands.OutCommand
 import com.e.btex.data.protocol.commands.ReadCommand
 import com.e.btex.data.protocol.commands.SyncCommand
+import dagger.android.AndroidInjection
 import timber.log.Timber
+import javax.inject.Inject
 
 class AqsService : BleService(), AqsInterface {
+
+    @Inject
+    lateinit var sensorsDao: SensorsDao
+
+    @Inject
+    lateinit var arrayLogDataMapper: RangeSensorMapper
 
     companion object {
         private const val ARG_RESULT_RECEIVER = "arg_result_receiver"
@@ -75,12 +87,11 @@ class AqsService : BleService(), AqsInterface {
 
         override fun onReceiveBytes(buffer: ByteArray, bytes: Int) {
             val dataState = parser.parse(buffer, bytes)
+
             if (dataState != null) {
                 when (dataState) {
                     is DataState.Success -> {
-                        val data = bundleOf(BleResultReceiver.PARAM_DATA to dataState.data)
-                        Timber.e("${dataState.data}")
-                        sendMessage(ServiceStates.OnReceiveData, data)
+                       dataClassDisposing(requireNotNull(dataState.data))
                     }
 
                     is DataState.IsLoading -> {
@@ -92,11 +103,25 @@ class AqsService : BleService(), AqsInterface {
 
     }
 
+    private fun dataClassDisposing(data: Any) {
+        when (data) {
+            is ArrayLogData -> {
+                sensorsDao.insertAll(*arrayLogDataMapper.map(data).toTypedArray())
+            }
+            else -> {
+                val bundle = bundleOf(BleResultReceiver.PARAM_DATA to data)
+                Timber.e("$data")
+                sendMessage(ServiceStates.OnReceiveData, bundle)
+            }
+        }
+    }
+
     private fun sendMessage(state: ServiceStates, data: Bundle = bundleOf()) {
         receiver.send(state.ordinal, data)
     }
 
     override fun onCreate() {
+        AndroidInjection.inject(this)
         super.onCreate()
         instance = this
     }

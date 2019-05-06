@@ -62,7 +62,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         }
 
         binding.buttonRead.setOnClickListener {
-            viewModel.loadLastBunchData(100)
+            viewModel.loadLastBunchData(1000)
         }
 
         setUpChart(binding.chart)
@@ -71,9 +71,9 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val current = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())
         viewModel.loadTargetAddress()
         viewModel.getLastSensors()
+
 
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
@@ -98,10 +98,11 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         viewModel.lastSensors.observe(this, Observer {
             binding.executeAfter {
                 sensors = it
-//                val now = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - current
-//                Timber.e("$now")
-//                addNewSensorVal(it.temperature, now)
             }
+        })
+
+        viewModel.allSensors.observe(viewLifecycleOwner, Observer {
+            toast("size: ${it.size}")
         })
     }
 

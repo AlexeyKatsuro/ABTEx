@@ -14,10 +14,10 @@ class DataBaseDataSource @Inject constructor(
         sensorsDao.getInTimeRangeLifeDate(from,to)
 
     fun getAllSensorsLiveDate(): LiveData<List<Sensors>> =
-        sensorsDao.getAllSernsorsLifeDate()
+        sensorsDao.getAllSensorsLifeDate()
 
     fun getAllSernsors(): List<Sensors> =
-        sensorsDao.getAllSernsors()
+        sensorsDao.getAllSensors()
 
     fun getInTimeRange(from: Long, to: Long): List<Sensors> =
         sensorsDao.getInTimeRange(from,to)

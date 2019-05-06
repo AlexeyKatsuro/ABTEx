@@ -18,9 +18,9 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
         get() = preliminarySize + logCount * logRowSize
 
     private val logCount
-        get() = (toId ?: 0 - fromId)
+        get() = ((toId ?: 0) - (fromId ?: 0)).coerceAtLeast(0)
 
-    var fromId: Int = 0
+    var fromId: Int? = null
     var toId: Int? = null
 
     override val commandCode: Int
@@ -28,7 +28,7 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
 
     override fun assemble(bytes: ByteArray): DataState<ArrayLogData>? {
         byteList.addAll(bytes.toList())
-        Timber.e("fromId: $fromId , toId $toId,  byteList: ${byteList.size} bytes , size: $size")
+        Timber.e("fromId: $fromId , toId $toId, logCount: $logCount, byteList: ${byteList.size} bytes , size: $size")
         return when {
             (byteList.size < preliminarySize) -> {
                 DataState.IsLoading(0)

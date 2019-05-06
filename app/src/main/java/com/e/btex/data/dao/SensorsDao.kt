@@ -3,6 +3,7 @@ package com.e.btex.data.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.e.btex.data.entity.Sensors
 
@@ -14,15 +15,15 @@ interface SensorsDao {
     fun getInTimeRangeLifeDate(from: Long, to: Long): LiveData<List<Sensors>>
 
     @Query("SELECT * FROM sensors")
-    fun getAllSernsorsLifeDate(): LiveData<List<Sensors>>
+    fun getAllSensorsLifeDate(): LiveData<List<Sensors>>
 
     @Query("SELECT * FROM sensors")
-    fun getAllSernsors(): List<Sensors>
+    fun getAllSensors(): List<Sensors>
 
     @Query("SELECT * FROM Sensors WHERE time >= :from AND time < :to")
     fun getInTimeRange(from: Long, to: Long): List<Sensors>
 
-    @Insert
+    @Insert(onConflict =  OnConflictStrategy.REPLACE)
     fun insertAll(vararg sensors: Sensors)
 
     @Query("DELETE FROM sensors")

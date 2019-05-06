@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothSocket
 import android.content.Intent
 import com.e.btex.data.BtDevice
 import com.e.btex.data.getRemoteDevice
+import dagger.android.DaggerService
 import timber.log.Timber
 import java.io.InputStream
 import java.io.OutputStream
