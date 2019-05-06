@@ -35,6 +35,7 @@ abstract class BaseFragment<VB : ViewDataBinding, VM : BaseViewModel> : DaggerFr
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = createDataBinding(inflater, container)
         binding.lifecycleOwner = viewLifecycleOwner
+        lifecycle
 
         return binding.root
     }

@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTEx"
         tools:ignore="GoogleAppIndexingWarning">
-        <service android:name=".connection.BleService"/>
+        <service android:name=".connection.AqsService"/>
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"

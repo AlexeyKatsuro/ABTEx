@@ -3,7 +3,7 @@ package com.e.btex.connection
 import com.e.btex.data.protocol.RemoteData
 
 
-interface ServiceStateCallback {
+interface AqsStateCallback {
     fun onStartConnecting()
     fun onFailedConnecting()
     fun onCreateConnection()

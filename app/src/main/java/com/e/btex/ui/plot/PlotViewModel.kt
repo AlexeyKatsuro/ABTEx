@@ -82,9 +82,10 @@ class PlotViewModel @Inject constructor(
         sensorsRepository.readLogs(fromId, toId)
     }
 
-    fun loadLastData() {
+    fun loadLastBunchData(count: Int) {
         status.value?.let {
-            sensorsRepository.readLogs(0, it.lastLogId)
+            val start = (it.lastLogId - count).coerceAtLeast(1)
+            sensorsRepository.readLogs(start, it.lastLogId)
         }
     }
 

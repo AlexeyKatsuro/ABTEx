@@ -62,7 +62,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         }
 
         binding.buttonRead.setOnClickListener {
-            viewModel.loadLastData()
+            viewModel.loadLastBunchData(100)
         }
 
         setUpChart(binding.chart)
@@ -198,7 +198,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
     }
 
     private fun updateToolbar(toolbar: Toolbar, state: ServiceState) {
-        toolbar.menu.findItem(R.id.action_refresh).isVisible =
+        toolbar.menu.findItem(R.id.action_refresh)?.isVisible =
             state is ServiceState.OnFailedConnecting || state is ServiceState.OnDestroyConnection
 
         when (state) {

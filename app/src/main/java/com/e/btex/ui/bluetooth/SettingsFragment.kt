@@ -3,7 +3,6 @@ package com.e.btex.ui.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.ACTION_REQUEST_ENABLE
 import android.bluetooth.BluetoothAdapter.getDefaultAdapter
-import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +11,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
-import com.e.btex.connection.BleService
-import com.e.btex.connection.ServiceStateCallback
 import com.e.btex.data.BtDevice
 import com.e.btex.data.mapToBtDevice
 import com.e.btex.databinding.FragmentSettingsBinding
@@ -21,12 +18,8 @@ import com.e.btex.databinding.ItemBluettoothDeciveBinding
 import com.e.btex.ui.adapters.DataBoundAdapter
 import com.e.btex.util.AutoSubscribeReceiver
 import com.e.btex.util.broadcastReceivers.BluetoothStateReceiver
-import com.e.btex.util.extensions.act
 import com.e.btex.util.extensions.hideKeyboard
-import com.e.btex.util.extensions.longToast
 import com.e.btex.util.extensions.toast
-import timber.log.Timber
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
 

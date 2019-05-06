@@ -5,9 +5,9 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import com.e.btex.connection.BleService
-import com.e.btex.connection.ServiceStateCallback
+import com.e.btex.connection.AqsService
+import com.e.btex.connection.bleservice.BleService
+import com.e.btex.connection.AqsStateCallback
 import com.e.btex.data.BtDevice
 import com.e.btex.data.ServiceState
 import com.e.btex.data.entity.Sensors
@@ -15,9 +15,6 @@ import com.e.btex.data.entity.StatusData
 import com.e.btex.data.mapToBtDevice
 import com.e.btex.data.mappers.SensorsMapper
 import com.e.btex.data.protocol.RemoteData
-import com.e.btex.util.Event
-import com.e.btex.util.EventObserver
-import com.e.btex.util.extensions.postEventValue
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -32,7 +29,7 @@ class BluetoothDataSource @Inject constructor(
 
     private val bleAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-    val callback = object : ServiceStateCallback {
+    val callback = object : AqsStateCallback {
         override fun onStartConnecting() {
             Timber.d("onStartConnecting")
             state.postValue(ServiceState.OnStartConnecting)
@@ -65,14 +62,14 @@ class BluetoothDataSource @Inject constructor(
     }
 
     fun initConnection(device: BtDevice): LiveData<ServiceState> {
-        if (BleService.instance == null) {
-            BleService.startService(context, device, callback)
+        if (AqsService.instance == null) {
+            AqsService.startService(context, device, callback)
         }
         return state
     }
 
     fun closeConnection(){
-        BleService.instance?.stopSelf()
+        AqsService.instance?.stopSelf()
     }
 
     fun getLastSensors():  LiveData<Sensors>{
@@ -87,6 +84,6 @@ class BluetoothDataSource @Inject constructor(
     }
 
     fun readLogs(fromId: Int, toId: Int){
-        BleService.instance?.readLogs(fromId, toId)
+        AqsService.instance?.readLogs(fromId, toId)
     }
 }

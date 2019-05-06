@@ -8,5 +8,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class ServiceBuilder {
 
     @ContributesAndroidInjector
-    internal abstract fun contributeBleService(): BleService
+    internal abstract fun contributeBleService(): AqsService
 }
