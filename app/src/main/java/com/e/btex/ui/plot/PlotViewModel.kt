@@ -11,9 +11,12 @@ import com.e.btex.data.entity.StatusData
 import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.data.repository.SensorsRepository
 import com.e.btex.util.Event
+import com.e.btex.util.extensions.map
 import com.e.btex.util.extensions.mapToEvent
 import com.e.btex.util.extensions.switchMap
 import com.e.btex.util.extensions.trigger
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PlotViewModel @Inject constructor(
@@ -23,6 +26,13 @@ class PlotViewModel @Inject constructor(
 
 
     val lastSensors = sensorsRepository.getLastSensorsLD()
+
+    val lastStoreId = sensorsRepository.getLastIdLD()
+
+    private val loadDataTrigger = MutableLiveData<Unit>()
+    val allSensors: LiveData<List<Sensors>> = loadDataTrigger.switchMap{
+        sensorsRepository.getAllSensorsLD()
+    }
 
     private val _status = MediatorLiveData<StatusData>()
     val status: LiveData<StatusData>
@@ -39,6 +49,7 @@ class PlotViewModel @Inject constructor(
         }
 
     init {
+        loadDataTrigger.trigger()
         _status.addSource(connectionState) {
             if (it is ServiceState.OnReceiveData && it.data is StatusData) {
                 _status.value = it.data
@@ -75,5 +86,6 @@ class PlotViewModel @Inject constructor(
             sensorsRepository.readLogs(start, it.lastLogId)
         }
     }
+
 
 }

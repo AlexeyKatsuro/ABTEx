@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Handler
 import android.os.ResultReceiver
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import com.e.btex.connection.bleservice.BleResultReceiver
 import com.e.btex.connection.bleservice.BleService
 import com.e.btex.connection.bleservice.BleServiceLifeCycle
@@ -96,10 +95,11 @@ class AqsService : BleService(), AqsInterface {
                 when (dataState) {
                     is DataState.Success -> {
                        dataClassDisposing(requireNotNull(dataState.data))
+                        Timber.e("onReceiveData ${dataState.data}%")
                     }
 
-                    is DataState.IsLoading -> {
-                        Timber.e("Loading ${dataState.progress}%")
+                    is DataState.Loading -> {
+                        Timber.e("Loading ${dataState.progress}/${dataState.range.endInclusive}")
                     }
                 }
             }
@@ -113,7 +113,15 @@ class AqsService : BleService(), AqsInterface {
                 sensorsDao.insertAll(rangeDataMapper.map(data))
             }
             is StatusData -> {
-                receiver.sendState(ServiceStates.OnReceiveData, data)
+                val lastStorageId = sensorsDao.getLastId()
+                val lastAqsId = data.lastLogId
+                Timber.e("Status: lastStorageId: $lastStorageId, lastAqsId: $lastAqsId")
+                if (lastAqsId == lastStorageId + 1){
+                    sensorsDao.insert(statusDataMapper.map(data))
+                } else {
+                    readLogs(lastStorageId+1,lastAqsId)
+                }
+                //receiver.sendState(ServiceStates.OnReceiveData, data)
             }
             else -> {
                 Timber.e("$data")

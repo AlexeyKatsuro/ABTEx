@@ -18,7 +18,7 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
         get() = preliminarySize + logCount * logRowSize
 
     private val logCount
-        get() = ((toId ?: 0) - (fromId ?: 0)).coerceAtLeast(0)
+        get() = ((toId ?: 0) - (fromId ?: 0)).coerceAtLeast(0) + 1
 
     var fromId: Int? = null
     var toId: Int? = null
@@ -31,16 +31,16 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
         Timber.e("fromId: $fromId , toId $toId, logCount: $logCount, byteList: ${byteList.size} bytes , size: $size")
         return when {
             (byteList.size < preliminarySize) -> {
-                DataState.IsLoading(0)
+                null
             }
-            (byteList.size >= preliminarySize && toId == null) -> {
+            (byteList.size >= preliminarySize && toId == null && fromId == null) -> {
 
                 val buffer = ByteBuffer.wrap(byteList.slice(0 until preliminarySize).toByteArray())
                     .order(ByteOrder.LITTLE_ENDIAN)
                 fromId = buffer.int
                 toId = buffer.int
 
-                DataState.IsLoading(byteList.size.percentageOf(size))
+                DataState.Loading((byteList.size-preliminarySize)/logRowSize, 0..logCount)
             }
             (byteList.size >= size) -> {
 
@@ -48,7 +48,7 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
                     .order(ByteOrder.LITTLE_ENDIAN)
                 DataState.Success(ArrayLogData(buffer.int, buffer.int, assembleList(buffer)))
             }
-            else -> DataState.IsLoading(byteList.size.percentageOf(size))
+            else -> DataState.Loading((byteList.size-preliminarySize)/logRowSize, 0..logCount)
         }
     }
 

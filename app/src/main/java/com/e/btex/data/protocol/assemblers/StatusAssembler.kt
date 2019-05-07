@@ -35,7 +35,7 @@ class StatusAssembler : DataAssembler<StatusData>() {
                     )
                 )
             )
-        } else DataState.IsLoading(byteList.size.percentageOf(size))
+        } else DataState.Loading(byteList.size.percentageOf(size))
     }
 
 

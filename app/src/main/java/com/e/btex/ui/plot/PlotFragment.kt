@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
@@ -95,7 +96,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         })
 
         viewModel.status.observe(viewLifecycleOwner, Observer {
-            binding.buttonRead.isVisible = true
+
         })
 
         viewModel.lastSensors.observe(viewLifecycleOwner, Observer {
@@ -103,6 +104,12 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                 sensors = it
             }
         })
+
+//        viewModel.allSensors.observe(viewLifecycleOwner, Observer {
+//            it.forEach {
+//                Timber.e("Id: ${it.id}")
+//            }
+//        })
 
     }
 
