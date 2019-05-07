@@ -8,10 +8,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SensorsMapper @Inject constructor() : Mapper<StatusData, Sensors> {
+class StatusDataMapper @Inject constructor() : Mapper<StatusData, Sensors> {
     override fun map(from: StatusData): Sensors {
         return Sensors(
-            id = from.lastLogId.toLong(),
+            id = from.lastLogId,
             time = UnixTimeUtils.currentUnixTime.toLong(),
             temperature = from.sensors.temperature.toFloat()/100,
             humidity = from.sensors.humidity.toFloat()/100,

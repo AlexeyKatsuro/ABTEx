@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 data class Sensors(
     @PrimaryKey
-    var id: Long,
+    var id: Int,
     val time: Long,
     val temperature: Float,
     val humidity: Float,
@@ -37,7 +37,7 @@ fun Sensors.getSensorMap(): Map<SensorsType, Float> {
     )
 }
 
-fun Sensors.Companion.getRandomValues(id: Long, time: Long): Sensors {
+fun Sensors.Companion.getRandomValues(id: Int, time: Long): Sensors {
     return Sensors(id,
         time,
         35.applyDispersion(0.3).toFloat(),

@@ -11,7 +11,7 @@
 
         <variable
             name="device"
-            type="com.e.btex.data.BtDevice"/>
+            type="com.e.btex.data.BtDevice" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -28,8 +28,10 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:subtitle="@{device.macAddress}"
                 app:title="@{device.name}"
-                app:subtitle="@{device.macAddress}"/>
+                tools:subtitle="45:56:JF:46:12:UO"
+                tools:title="Divice" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,7 +39,21 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include
+                android:id="@+id/appbar_progress"
+                layout="@layout/include_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:size="@{100}"
+                app:progress="@{40}"
+                app:isVisible="@{true}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <FrameLayout
                 android:id="@+id/chart_container"
@@ -50,10 +66,10 @@
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
-                    app:noDataText="@{@string/no_data}"
-                    app:noDataTextColor="@{@color/colorSecondary}"
+                    android:layout_height="match_parent"
                     android:text="@string/paired_devices"
-                    android:layout_height="match_parent" />
+                    app:noDataText="@{@string/no_data}"
+                    app:noDataTextColor="@{@color/colorSecondary}" />
 
             </FrameLayout>
 

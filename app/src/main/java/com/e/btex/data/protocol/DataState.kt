@@ -1,6 +1,5 @@
 package com.e.btex.data.protocol
 
-import kotlin.reflect.KClass
 
 sealed class DataState<out R> {
 

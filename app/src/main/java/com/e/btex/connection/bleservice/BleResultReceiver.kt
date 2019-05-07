@@ -2,7 +2,9 @@ package com.e.btex.connection.bleservice
 
 import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.os.ResultReceiver
+import androidx.core.os.bundleOf
 import com.e.btex.connection.AqsStateCallback
 import com.e.btex.data.ServiceStates
 import com.e.btex.data.protocol.RemoteData
@@ -38,4 +40,9 @@ class BleResultReceiver(handler: Handler, callback: AqsStateCallback) : ResultRe
             }
         }
     }
+}
+
+fun ResultReceiver.sendState(state: ServiceStates, data: Any? = null) {
+    val bundle = data?.let { bundleOf(BleResultReceiver.PARAM_DATA to it) } ?: bundleOf()
+    send(state.ordinal, bundle)
 }

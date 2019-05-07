@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import com.e.btex.data.BtDevice
 import com.e.btex.data.ServiceState
 import com.e.btex.data.entity.Sensors
-import com.e.btex.util.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -16,7 +15,9 @@ class SensorsRepository @Inject constructor(
     private val bluetoothDataSource: BluetoothDataSource
 ) {
 
-    fun getAllSensorsLiveDate(): LiveData<List<Sensors>> = dataBaseDataSource.getAllSensorsLiveDate()
+    fun getAllSensorsLD(): LiveData<List<Sensors>> = dataBaseDataSource.getAllSensorsLD()
+    fun getLastSensorsLD(): LiveData<Sensors> = dataBaseDataSource.getLastSensorLD()
+    fun getLastIdLD(): LiveData<Int> = dataBaseDataSource.getLastIdLD()
 
     suspend fun getAllSernsors(): List<Sensors> {
         return withContext(Dispatchers.IO) {
@@ -30,9 +31,9 @@ class SensorsRepository @Inject constructor(
         }
     }
 
-    suspend fun insertAll(vararg sensors: Sensors) {
+    suspend fun insertAll(sensorsList: List<Sensors>) {
         withContext(Dispatchers.IO){
-            dataBaseDataSource.insertAll(*sensors)
+            dataBaseDataSource.insertAll(sensorsList)
         }
     }
 
@@ -56,9 +57,6 @@ class SensorsRepository @Inject constructor(
         bluetoothDataSource.closeConnection()
     }
 
-    fun getLastSensors(): LiveData<Sensors> {
-       return bluetoothDataSource.getLastSensors()
-    }
 
     fun readLogs(fromId: Int, toId: Int) {
         bluetoothDataSource.readLogs(fromId, toId)

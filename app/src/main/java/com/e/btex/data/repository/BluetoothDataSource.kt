@@ -6,14 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.e.btex.connection.AqsService
-import com.e.btex.connection.bleservice.BleService
 import com.e.btex.connection.AqsStateCallback
 import com.e.btex.data.BtDevice
 import com.e.btex.data.ServiceState
 import com.e.btex.data.entity.Sensors
 import com.e.btex.data.entity.StatusData
 import com.e.btex.data.mapToBtDevice
-import com.e.btex.data.mappers.SensorsMapper
+import com.e.btex.data.mappers.StatusDataMapper
 import com.e.btex.data.protocol.RemoteData
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,7 +21,7 @@ import javax.inject.Singleton
 @Singleton
 class BluetoothDataSource @Inject constructor(
     private val context: Context,
-    private val sensorsMapper: SensorsMapper
+    private val sensorsMapper: StatusDataMapper
 ) {
 
     private val state = MutableLiveData<ServiceState>()
@@ -70,17 +69,6 @@ class BluetoothDataSource @Inject constructor(
 
     fun closeConnection(){
         AqsService.instance?.stopSelf()
-    }
-
-    fun getLastSensors():  LiveData<Sensors>{
-        return MediatorLiveData<Sensors>().apply {
-            addSource(state) {state ->
-                if (state is ServiceState.OnReceiveData && state.data is StatusData){
-                    val sensors: Sensors = sensorsMapper.map(state.data)
-                    this.postValue(sensors)
-                }
-            }
-        }
     }
 
     fun readLogs(fromId: Int, toId: Int){

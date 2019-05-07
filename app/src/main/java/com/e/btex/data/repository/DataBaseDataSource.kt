@@ -10,11 +10,17 @@ import javax.inject.Singleton
 class DataBaseDataSource @Inject constructor(
     private val sensorsDao: SensorsDao
 ){
-    fun getInTimeRangeLifeDate(from: Long, to: Long): LiveData<List<Sensors>> =
-        sensorsDao.getInTimeRangeLifeDate(from,to)
+    fun getInTimeRangeLD(from: Long, to: Long): LiveData<List<Sensors>> =
+        sensorsDao.getInTimeRangeLD(from,to)
 
-    fun getAllSensorsLiveDate(): LiveData<List<Sensors>> =
-        sensorsDao.getAllSensorsLifeDate()
+    fun getAllSensorsLD(): LiveData<List<Sensors>> =
+        sensorsDao.getAllSensorsLD()
+
+    fun getLastIdLD(): LiveData<Int> =
+        sensorsDao.getLastIdLD()
+
+    fun getLastSensorLD(): LiveData<Sensors> =
+        sensorsDao.getLastSensorLD()
 
     fun getAllSernsors(): List<Sensors> =
         sensorsDao.getAllSensors()
@@ -22,8 +28,11 @@ class DataBaseDataSource @Inject constructor(
     fun getInTimeRange(from: Long, to: Long): List<Sensors> =
         sensorsDao.getInTimeRange(from,to)
 
-    fun insertAll(vararg sensors: Sensors) =
-        sensorsDao.insertAll(*sensors)
+    fun insertAll(sensorsList: List<Sensors>) =
+        sensorsDao.insertAll(sensorsList)
+
+    fun insert(sensors: Sensors) =
+        sensorsDao.insert(sensors)
 
     fun wipe() =
         sensorsDao.wipe()

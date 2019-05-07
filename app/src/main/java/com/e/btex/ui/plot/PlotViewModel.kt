@@ -21,19 +21,12 @@ class PlotViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository
 ) : BaseViewModel() {
 
-    private val loadLastSensors = MutableLiveData<Unit>()
 
-    val lastSensors = sensorsRepository.getLastSensors()
+    val lastSensors = sensorsRepository.getLastSensorsLD()
 
     private val _status = MediatorLiveData<StatusData>()
     val status: LiveData<StatusData>
         get() = _status
-
-    private val loadDataTrigger = MutableLiveData<Unit>()
-    val allSensors: LiveData<List<Sensors>> = loadDataTrigger.switchMap {
-        sensorsRepository.getAllSensorsLiveDate()
-    }
-
 
     private val loadDeviceTrigger = MutableLiveData<Unit>()
     val targetDevice: LiveData<Event<BtDevice?>> = loadDeviceTrigger.mapToEvent {
@@ -46,8 +39,6 @@ class PlotViewModel @Inject constructor(
         }
 
     init {
-        loadDataTrigger.trigger()
-
         _status.addSource(connectionState) {
             if (it is ServiceState.OnReceiveData && it.data is StatusData) {
                 _status.value = it.data
@@ -72,10 +63,6 @@ class PlotViewModel @Inject constructor(
 
     fun closeConnection() {
         sensorsRepository.closeConnection()
-    }
-
-    fun getLastSensors() {
-        loadLastSensors.trigger()
     }
 
     fun readLogs(fromId: Int, toId: Int) {

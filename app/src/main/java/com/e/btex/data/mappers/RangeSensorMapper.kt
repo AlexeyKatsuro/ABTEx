@@ -10,7 +10,7 @@ class RangeSensorMapper @Inject constructor() : Mapper<ArrayLogData, List<Sensor
     override fun map(from: ArrayLogData): List<Sensors> {
         return from.logList.mapIndexed { index, logRowData ->
             Sensors(
-                id = (from.formId + index).toLong(),
+                id = from.formId + index,
                 time = logRowData.rTime.toLong(),
                 temperature = logRowData.sensorsData.temperature.toFloat() / 100,
                 humidity = logRowData.sensorsData.humidity.toFloat() / 100,

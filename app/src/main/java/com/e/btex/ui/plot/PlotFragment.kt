@@ -1,5 +1,6 @@
 package com.e.btex.ui.plot
 
+import android.app.ProgressDialog
 import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -62,7 +63,10 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         }
 
         binding.buttonRead.setOnClickListener {
-            viewModel.loadLastBunchData(1000)
+            //viewModel.loadLastBunchData(1000)
+            binding.appbarProgress.executeAfter {
+                isVisible = !(isVisible?: false)
+            }
         }
 
         setUpChart(binding.chart)
@@ -72,7 +76,6 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadTargetAddress()
-        viewModel.getLastSensors()
 
 
         viewModel.targetDevice.observe(this, EventObserver {
@@ -87,23 +90,20 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             }
         })
 
-        viewModel.connectionState.observe(this, Observer {
+        viewModel.connectionState.observe(viewLifecycleOwner, Observer {
             updateUI(it)
         })
 
-        viewModel.status.observe(this, Observer {
+        viewModel.status.observe(viewLifecycleOwner, Observer {
             binding.buttonRead.isVisible = true
         })
 
-        viewModel.lastSensors.observe(this, Observer {
+        viewModel.lastSensors.observe(viewLifecycleOwner, Observer {
             binding.executeAfter {
                 sensors = it
             }
         })
 
-        viewModel.allSensors.observe(viewLifecycleOwner, Observer {
-            toast("size: ${it.size}")
-        })
     }
 
     private fun setUpChart(chart: LineChart) {

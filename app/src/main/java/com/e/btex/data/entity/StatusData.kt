@@ -9,6 +9,4 @@ data class StatusData(
     val status: Int,
     val lastLogId: Int,
     val sensors: SensorsData
-) : RemoteData {
-
-}
+) : RemoteData
