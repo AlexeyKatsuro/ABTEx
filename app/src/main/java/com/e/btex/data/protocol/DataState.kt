@@ -1,11 +1,10 @@
 package com.e.btex.data.protocol
 
+import com.e.btex.data.entity.LoadingData
+import kotlinx.android.parcel.Parcelize
 
-sealed class DataState<out R> {
-
-
-    class Success<out T>(val data: T) : DataState<T>()
-    class Loading(val progress: Int, val range: ClosedRange<Int> = 0..100) : DataState<Nothing>(){
-
-    }
-}
+@Parcelize
+data class DataState<T : RemoteData>(
+    val data: T? = null,
+    val loadingInfo: LoadingData
+): RemoteData

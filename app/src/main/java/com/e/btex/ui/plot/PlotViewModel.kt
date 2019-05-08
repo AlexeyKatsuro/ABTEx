@@ -6,17 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import com.e.btex.base.BaseViewModel
 import com.e.btex.data.BtDevice
 import com.e.btex.data.ServiceState
+import com.e.btex.data.entity.LoadingData
 import com.e.btex.data.entity.Sensors
 import com.e.btex.data.entity.StatusData
 import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.data.repository.SensorsRepository
 import com.e.btex.util.Event
-import com.e.btex.util.extensions.map
 import com.e.btex.util.extensions.mapToEvent
 import com.e.btex.util.extensions.switchMap
 import com.e.btex.util.extensions.trigger
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PlotViewModel @Inject constructor(
@@ -34,9 +32,11 @@ class PlotViewModel @Inject constructor(
         sensorsRepository.getAllSensorsLD()
     }
 
-    private val _status = MediatorLiveData<StatusData>()
-    val status: LiveData<StatusData>
-        get() = _status
+    private val _loading = MediatorLiveData<LoadingData>()
+    val loading: LiveData<LoadingData>
+        get() = _loading
+
+
 
     private val loadDeviceTrigger = MutableLiveData<Unit>()
     val targetDevice: LiveData<Event<BtDevice?>> = loadDeviceTrigger.mapToEvent {
@@ -50,9 +50,9 @@ class PlotViewModel @Inject constructor(
 
     init {
         loadDataTrigger.trigger()
-        _status.addSource(connectionState) {
-            if (it is ServiceState.OnReceiveData && it.data is StatusData) {
-                _status.value = it.data
+        _loading.addSource(connectionState) {
+            if (it is ServiceState.OnReceiveData && it.data is LoadingData) {
+                _loading.value = it.data
             }
         }
     }
@@ -79,13 +79,5 @@ class PlotViewModel @Inject constructor(
     fun readLogs(fromId: Int, toId: Int) {
         sensorsRepository.readLogs(fromId, toId)
     }
-
-    fun loadLastBunchData(count: Int) {
-        status.value?.let {
-            val start = (it.lastLogId - count).coerceAtLeast(1)
-            sensorsRepository.readLogs(start, it.lastLogId)
-        }
-    }
-
 
 }

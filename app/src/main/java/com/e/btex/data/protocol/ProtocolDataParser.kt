@@ -13,23 +13,22 @@ class ProtocolDataParser {
 
     private var assembler: DataAssembler<*>? = null
 
-    fun parse(array: ByteArray, size: Int): DataState<*>? {
-        val list: MutableList<Byte> = array.slice(0 until size).toMutableList()
+    fun parse(buffer: ByteArray, size: Int): DataState<*>? {
+        var array= buffer.sliceArray(0 until size)
 
         //Cycle for finding Signature
         for (index: Int in 0 until size - 2) {
             if (array[index] == SIGN_1ST && array[index + 1] == SIGN_2ND) {
                 val code = array[index + 2].toPositiveInt()
                 assembler = AssemblerFactory.getAssembler(code)
+
                 //remove command Head
-                list.removeAt(index)
-                list.removeAt(index)
-                list.removeAt(index)
+                array = array.sliceArray(index+3 until size)
                 break
             }
         }
 
-        return assembler?.assemble(list.toByteArray())
+        return assembler?.assemble(array)
     }
 
 }

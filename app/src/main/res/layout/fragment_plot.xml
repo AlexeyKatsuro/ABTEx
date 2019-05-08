@@ -47,9 +47,6 @@
                 layout="@layout/include_progress_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:size="@{100}"
-                app:progress="@{40}"
-                app:isVisible="@{true}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -165,16 +162,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView8"
                 tools:text="Temperature: 25" />
 
-            <Button
-                android:id="@+id/button_read"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:layout_marginBottom="@dimen/margin_normal"
-                android:text="Загрузить"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

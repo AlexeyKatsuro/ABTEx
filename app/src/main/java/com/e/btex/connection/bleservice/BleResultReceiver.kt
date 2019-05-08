@@ -42,7 +42,7 @@ class BleResultReceiver(handler: Handler, callback: AqsStateCallback) : ResultRe
     }
 }
 
-fun ResultReceiver.sendState(state: ServiceStates, data: Any? = null) {
+fun ResultReceiver.sendState(state: ServiceStates, data: RemoteData? = null) {
     val bundle = data?.let { bundleOf(BleResultReceiver.PARAM_DATA to it) } ?: bundleOf()
     send(state.ordinal, bundle)
 }

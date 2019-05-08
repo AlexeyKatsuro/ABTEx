@@ -16,8 +16,8 @@ import com.e.btex.data.entity.ArrayLogData
 import com.e.btex.data.entity.StatusData
 import com.e.btex.data.mappers.RangeSensorMapper
 import com.e.btex.data.mappers.StatusDataMapper
-import com.e.btex.data.protocol.DataState
 import com.e.btex.data.protocol.ProtocolDataParser
+import com.e.btex.data.protocol.RemoteData
 import com.e.btex.data.protocol.commands.OutCommand
 import com.e.btex.data.protocol.commands.ReadCommand
 import com.e.btex.data.protocol.commands.SyncCommand
@@ -92,22 +92,22 @@ class AqsService : BleService(), AqsInterface {
             val dataState = parser.parse(buffer, bytes)
 
             if (dataState != null) {
-                when (dataState) {
-                    is DataState.Success -> {
-                       dataClassDisposing(requireNotNull(dataState.data))
-                        Timber.e("onReceiveData ${dataState.data}%")
-                    }
+                dataState.loadingInfo.let {
+                    Timber.e("Loading ${it.progress}/${it.size}")
+                    if (dataState.data is ArrayLogData?) dataClassDisposing(it) //TODO
+                }
 
-                    is DataState.Loading -> {
-                        Timber.e("Loading ${dataState.progress}/${dataState.range.endInclusive}")
-                    }
+                dataState.data?.let {
+                    Timber.e("onReceiveData $it")
+                    dataClassDisposing(it)
                 }
             }
         }
 
     }
 
-    private fun dataClassDisposing(data: Any) {
+    //TODO
+    private fun dataClassDisposing(data: RemoteData) {
         when (data) {
             is ArrayLogData -> {
                 sensorsDao.insertAll(rangeDataMapper.map(data))
@@ -116,10 +116,10 @@ class AqsService : BleService(), AqsInterface {
                 val lastStorageId = sensorsDao.getLastId()
                 val lastAqsId = data.lastLogId
                 Timber.e("Status: lastStorageId: $lastStorageId, lastAqsId: $lastAqsId")
-                if (lastAqsId == lastStorageId + 1){
+                if (lastAqsId == lastStorageId + 1) {
                     sensorsDao.insert(statusDataMapper.map(data))
                 } else {
-                    readLogs(lastStorageId+1,lastAqsId)
+                    readLogs(lastStorageId + 1, lastAqsId)
                 }
                 //receiver.sendState(ServiceStates.OnReceiveData, data)
             }

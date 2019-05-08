@@ -1,19 +1,15 @@
 package com.e.btex.ui.plot
 
-import android.app.ProgressDialog
 import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
 import com.e.btex.data.ServiceState
-import com.e.btex.data.entity.Sensors
 import com.e.btex.databinding.FragmentPlotBinding
 import com.e.btex.util.EventObserver
 import com.e.btex.util.extensions.executeAfter
@@ -23,8 +19,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
 
@@ -54,19 +48,12 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                         viewModel.refreshConnection()
                         true
                     }
-                    R.id.action_turn_off ->{
+                    R.id.action_turn_off -> {
                         viewModel.closeConnection()
                         true
                     }
                     else -> false
                 }
-            }
-        }
-
-        binding.buttonRead.setOnClickListener {
-            //viewModel.loadLastBunchData(1000)
-            binding.appbarProgress.executeAfter {
-                isVisible = !(isVisible?: false)
             }
         }
 
@@ -81,7 +68,6 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
-
                 navController.navigate(R.id.showSettingsFragment)
             } else {
                 binding.executeAfter {
@@ -95,8 +81,12 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             updateUI(it)
         })
 
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-
+        viewModel.loading.observe(viewLifecycleOwner, Observer {
+            binding.appbarProgress.executeAfter {
+                isVisible = it.isLoading
+                progress = it.progress
+                size = it.size
+            }
         })
 
         viewModel.lastSensors.observe(viewLifecycleOwner, Observer {

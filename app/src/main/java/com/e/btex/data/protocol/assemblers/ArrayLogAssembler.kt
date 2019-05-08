@@ -1,10 +1,10 @@
 package com.e.btex.data.protocol.assemblers
 
 import com.e.btex.data.entity.ArrayLogData
+import com.e.btex.data.entity.LoadingData
 import com.e.btex.data.entity.LogRowData
 import com.e.btex.data.entity.SensorsData
 import com.e.btex.data.protocol.DataState
-import com.e.btex.util.extensions.percentageOf
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -26,35 +26,45 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
     override val commandCode: Int
         get() = 1
 
+    private val dataState = DataState<ArrayLogData>(loadingInfo = LoadingData(0, size))
+    private val loadingProgress: Int
+        get() = (byteArray.size - preliminarySize) / logRowSize.coerceAtLeast(0)
+
     override fun assemble(bytes: ByteArray): DataState<ArrayLogData>? {
-        byteList.addAll(bytes.toList())
-        Timber.e("fromId: $fromId , toId $toId, logCount: $logCount, byteList: ${byteList.size} bytes , size: $size")
+        byteArray += bytes
+        dataState.loadingInfo.apply {
+            progress = loadingProgress
+            size = logCount
+        }
+
+        Timber.e("fromId: $fromId , toId $toId, logCount: $logCount, byteList: ${byteArray.size} bytes , size: $size")
         return when {
-            (byteList.size < preliminarySize) -> {
+            (byteArray.size < preliminarySize) -> {
                 null
             }
-            (byteList.size >= preliminarySize && toId == null && fromId == null) -> {
+            (byteArray.size >= preliminarySize && toId == null && fromId == null) -> {
 
-                val buffer = ByteBuffer.wrap(byteList.slice(0 until preliminarySize).toByteArray())
+                val buffer = ByteBuffer.wrap(byteArray.sliceArray(0 until preliminarySize))
                     .order(ByteOrder.LITTLE_ENDIAN)
                 fromId = buffer.int
                 toId = buffer.int
 
-                DataState.Loading((byteList.size-preliminarySize)/logRowSize, 0..logCount)
+                dataState
             }
-            (byteList.size >= size) -> {
+            (byteArray.size >= size) -> {
 
-                val buffer = ByteBuffer.wrap(byteList.toByteArray())
+                val buffer = ByteBuffer.wrap(byteArray)
                     .order(ByteOrder.LITTLE_ENDIAN)
-                DataState.Success(ArrayLogData(buffer.int, buffer.int, assembleList(buffer)))
+
+                dataState.copy( data = ArrayLogData(buffer.int, buffer.int, assembleList(buffer)))
             }
-            else -> DataState.Loading((byteList.size-preliminarySize)/logRowSize, 0..logCount)
+            else -> dataState
         }
     }
 
 
-    private fun assembleList(buffer: ByteBuffer): List<LogRowData>{
-        return MutableList(logCount){
+    private fun assembleList(buffer: ByteBuffer): List<LogRowData> {
+        return MutableList(logCount) {
             LogRowData(
                 buffer.int,
                 buffer.int,
