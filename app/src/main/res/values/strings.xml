@@ -25,18 +25,18 @@
     <string name="co2">co2</string>
     <string name="pm1">pm1</string>
     <string name="pm10">pm10</string>
-    <string name="pm25">pm25</string>
+    <string name="pm25">pm2.5</string>
     <string name="tvoc">tvoc</string>
 
     <string name="sensor_val">%1$s: %2$.2f</string>
 
-    <string name="temperature_val">Температура: %1$.2f</string>
-    <string name="humidity_val">Влажность: %1$.2f</string>
-    <string name="co2_val">co2: %1$.2f</string>
-    <string name="pm1_val">pm1: %1$.2f</string>
-    <string name="pm10_val">pm10: %1$.2f</string>
-    <string name="pm25_val">pm25: %1$.2f</string>
-    <string name="tvoc_val">tvoc: %1$.2f</string>
+    <string name="temperature_val">%1$.2f °C</string>
+    <string name="humidity_val">%1$.2f%%</string>
+    <string name="co2_val">%1$.2f ppm</string>
+    <string name="pm1_val">%1$.2f мкг/м3</string>
+    <string name="pm10_val">%1$.2f мкг/м3</string>
+    <string name="pm25_val">%1$.2f мкг/м3</string>
+    <string name="tvoc_val">%1$.2f мкг/м3</string>
     
     <string name="count_percent">%1$d%%</string>
     <string name="count_item_of">%1$d/%2$d</string>

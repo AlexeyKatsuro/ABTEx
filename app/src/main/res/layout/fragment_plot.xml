@@ -55,7 +55,9 @@
             <FrameLayout
                 android:id="@+id/chart_container"
                 android:layout_width="0dp"
-                android:layout_height="300dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/bottom_sheet_peek_height"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -67,103 +69,13 @@
                     android:text="@string/paired_devices"
                     app:noDataText="@{@string/no_data}"
                     app:noDataTextColor="@{@color/colorSecondary}" />
-
             </FrameLayout>
-
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/spacing_mini"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@{@string/temperature_val(sensors.temperature)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chart_container"
-                tools:text="@string/settings" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/spacing_mini"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@{@string/humidity_val(sensors.humidity)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
-                tools:text="Temperature: 25" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/spacing_mini"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@{@string/co2_val(sensors.co2)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
-                tools:text="Temperature: 25" />
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/spacing_mini"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@{@string/pm1_val(sensors.pm1)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
-                tools:text="Temperature: 25" />
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/spacing_mini"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@{@string/pm25_val(sensors.pm25)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6"
-                tools:text="Temperature: 25" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/spacing_mini"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@{@string/pm10_val(sensors.pm10)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7"
-                tools:text="Temperature: 25" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/spacing_mini"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@{@string/tvoc_val(sensors.tvoc)}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8"
-                tools:text="Temperature: 25" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <include
+            layout="@layout/bottom_sheet_sensors_values"
+            app:sensors="@{sensors}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -6,4 +6,7 @@
     <color name="colorSecondary">#03DAC6</color>
 
     <color name="gray_divider">#E6E2DC</color>
+
+    <color name="colorBackground">#F6F6F6</color>
+    <color name="colorOnBackground">#212121</color>
 </resources>
