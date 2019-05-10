@@ -1,17 +1,19 @@
 package com.e.btex.data.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.e.btex.data.SensorsType
-import com.e.btex.data.protocol.RemoteData
 import com.e.btex.util.extensions.applyDispersion
-import kotlinx.android.parcel.Parcelize
+import com.e.btex.util.extensions.toFormattedString
+import kotlinx.android.parcel.IgnoredOnParcel
+import java.util.Date
 
 @Entity
 data class Sensors(
     @PrimaryKey
     var id: Int,
-    val time: Long,
+    val time: Long, //seconds
     val temperature: Float,
     val humidity: Float,
     val co2: Float,
@@ -19,8 +21,11 @@ data class Sensors(
     val pm10: Float,
     val pm25: Float,
     val tvoc: Float
-){
+) {
 
+    @IgnoredOnParcel
+    @Ignore
+    val timeText: String = Date(time*1000).toFormattedString()
 
     companion object
 }
@@ -38,7 +43,8 @@ fun Sensors.getSensorMap(): Map<SensorsType, Float> {
 }
 
 fun Sensors.Companion.getRandomValues(id: Int, time: Long): Sensors {
-    return Sensors(id,
+    return Sensors(
+        id,
         time,
         35.applyDispersion(0.3).toFloat(),
         45.applyDispersion(0.3).toFloat(),

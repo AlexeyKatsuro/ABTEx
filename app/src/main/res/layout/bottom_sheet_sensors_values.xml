@@ -19,16 +19,26 @@
         app:behavior_hideable="false"
         app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        
+        <TextView
+            android:id="@+id/value_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_mini"
+            android:layout_marginEnd="@dimen/margin_normal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{sensors.timeText}"
+            tools:text="15:12 12.08.2008"/>
 
         <ImageView
             android:id="@+id/image_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/spacing_mini"
             android:src="@drawable/ic_temperature"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/value_time" />
 
         <TextView
             android:id="@+id/label_temperature"

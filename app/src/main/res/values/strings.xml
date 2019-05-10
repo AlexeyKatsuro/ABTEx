@@ -33,10 +33,10 @@
     <string name="temperature_val">%1$.2f °C</string>
     <string name="humidity_val">%1$.2f%%</string>
     <string name="co2_val">%1$.2f ppm</string>
-    <string name="pm1_val">%1$.2f мкг/м3</string>
-    <string name="pm10_val">%1$.2f мкг/м3</string>
-    <string name="pm25_val">%1$.2f мкг/м3</string>
-    <string name="tvoc_val">%1$.2f мкг/м3</string>
+    <string name="pm1_val">%1$.2f мкг/м³</string>
+    <string name="pm10_val">%1$.2f мкг/м³</string>
+    <string name="pm25_val">%1$.2f мкг/м³</string>
+    <string name="tvoc_val">%1$.2f мкг/м³</string>
     
     <string name="count_percent">%1$d%%</string>
     <string name="count_item_of">%1$d/%2$d</string>

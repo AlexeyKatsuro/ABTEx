@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import timber.log.Timber
 import kotlin.reflect.KClass
 
 
@@ -90,6 +91,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         })
 
         viewModel.lastSensors.observe(viewLifecycleOwner, Observer {
+            Timber.e("Id: ${it.id}, Date, ${it.timeText} $it")
             binding.executeAfter {
                 sensors = it
             }

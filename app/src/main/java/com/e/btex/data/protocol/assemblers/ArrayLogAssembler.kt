@@ -5,6 +5,7 @@ import com.e.btex.data.entity.LoadingData
 import com.e.btex.data.entity.LogRowData
 import com.e.btex.data.entity.SensorsData
 import com.e.btex.data.protocol.DataState
+import com.e.btex.util.extensions.toByteArray
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -26,45 +27,48 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
     override val commandCode: Int
         get() = 1
 
-    private val dataState = DataState<ArrayLogData>(loadingInfo = LoadingData(0, size))
-    private val loadingProgress: Int
-        get() = (byteArray.size - preliminarySize) / logRowSize.coerceAtLeast(0)
+    private val dataState = DataState<ArrayLogData>(loadingInfo = LoadingData(0, logCount))
+
+    private var loadedCount: Int = 0
+
 
     override fun assemble(bytes: ByteArray): DataState<ArrayLogData>? {
         byteArray += bytes
-        dataState.loadingInfo.apply {
-            progress = loadingProgress
-            size = logCount
+        Timber.e("size: ${byteArray.size}")
+
+        if (byteArray.size >= preliminarySize && toId == null && fromId == null) {
+            val buffer = ByteBuffer.wrap(byteArray.sliceArray(0 until preliminarySize))
+                .order(ByteOrder.LITTLE_ENDIAN)
+            fromId = buffer.int
+            toId = buffer.int
+            return dataState.apply {
+                loadingInfo.progress = loadedCount
+                loadingInfo.size = logCount
+            }
         }
-
-        Timber.e("fromId: $fromId , toId $toId, logCount: $logCount, byteList: ${byteArray.size} bytes , size: $size")
-        return when {
-            (byteArray.size < preliminarySize) -> {
-                null
+        if (byteArray.size >= preliminarySize + logRowSize) {
+            val count = (byteArray.size - preliminarySize) / logRowSize
+            val buffer = ByteBuffer.wrap(byteArray).order(ByteOrder.LITTLE_ENDIAN)
+            val index = preliminarySize + logRowSize * count
+            val start = byteArray.sliceArray(0 until preliminarySize)
+            val end = byteArray.sliceArray(index until byteArray.size)
+            byteArray = start + end
+            Timber.e("size: ${byteArray.size}")
+            return dataState.copy(
+                data = ArrayLogData(
+                    buffer.int + loadedCount,
+                    buffer.int,
+                    assembleList(buffer, count)
+                )
+            ).apply {
+                loadingInfo.progress = loadedCount
             }
-            (byteArray.size >= preliminarySize && toId == null && fromId == null) -> {
-
-                val buffer = ByteBuffer.wrap(byteArray.sliceArray(0 until preliminarySize))
-                    .order(ByteOrder.LITTLE_ENDIAN)
-                fromId = buffer.int
-                toId = buffer.int
-
-                dataState
-            }
-            (byteArray.size >= size) -> {
-
-                val buffer = ByteBuffer.wrap(byteArray)
-                    .order(ByteOrder.LITTLE_ENDIAN)
-
-                dataState.copy( data = ArrayLogData(buffer.int, buffer.int, assembleList(buffer)))
-            }
-            else -> dataState
         }
+        return null
     }
 
-
-    private fun assembleList(buffer: ByteBuffer): List<LogRowData> {
-        return MutableList(logCount) {
+    private fun assembleList(buffer: ByteBuffer, count: Int): List<LogRowData> {
+        return MutableList(count) {
             LogRowData(
                 buffer.int,
                 buffer.int,
@@ -78,6 +82,8 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
                     buffer.short
                 )
             )
+        }.apply {
+            loadedCount += size
         }
     }
 }
