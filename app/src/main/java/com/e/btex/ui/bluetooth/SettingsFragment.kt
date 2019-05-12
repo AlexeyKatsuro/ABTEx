@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
 import com.e.btex.data.BtDevice
@@ -26,6 +27,7 @@ import kotlin.reflect.KClass
 class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel>() {
 
 
+    private val args by navArgs<SettingsFragmentArgs>()
 
     override val viewModelClass: KClass<SettingsViewModel>
         get() = SettingsViewModel::class
@@ -50,9 +52,15 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        binding.includeAppBar.toolBar.setNavigationOnClickListener {
-            hideKeyboard()
-            navController.navigateUp()
+
+        if(args.isStart){
+            binding.includeAppBar.toolBar.navigationIcon = null
+        } else {
+            binding.includeAppBar.toolBar.setNavigationOnClickListener {
+                hideKeyboard()
+                navController.navigateUp()
+                navController.currentDestination?.parent
+            }
         }
 
         binding.switchContainer.setOnClickListener {
@@ -67,6 +75,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
         pairDeviceAdapter.setOnItemClickListener { _, _, item ->
           //  BleService.startService(act.applicationContext,item)
             viewModel.setTargetAddress(item.macAddress)
+            val directions = SettingsFragmentDirections.showPlotFragment()
+            navController.navigate(directions)
         }
 
 
@@ -83,9 +93,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
         viewModel.targetAddress.observe(this, Observer {
             if (it.isNullOrEmpty()) {
                 toast("Выберите устройство")
-            } else {
-                val device: BtDevice = bleAdapter.getRemoteDevice(it).mapToBtDevice()
-                toast("Device: $device")
             }
         })
 

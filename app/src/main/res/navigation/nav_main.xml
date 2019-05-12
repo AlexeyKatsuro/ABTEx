@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/nav_main"
     app:startDestination="@id/plotFragment">
 
     <fragment
@@ -14,11 +14,28 @@
         <action
             android:id="@+id/showSettingsFragment"
             app:destination="@id/settingsFragment" />
+
+        <action
+            android:id="@+id/startWithSettingsFragment"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@+id/nav_main"
+            app:popUpToInclusive="true" />
+
     </fragment>
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.e.btex.ui.bluetooth.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/fragment_settings"/>
+        tools:layout="@layout/fragment_settings">
+        <argument
+            android:name="isStart"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/showPlotFragment"
+            app:destination="@id/plotFragment"
+            app:popUpTo="@+id/nav_main"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

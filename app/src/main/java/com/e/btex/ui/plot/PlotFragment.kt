@@ -19,7 +19,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import timber.log.Timber
 import kotlin.reflect.KClass
 
 
@@ -42,7 +41,8 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.action_device_settings -> {
-                        navController.navigate(R.id.showSettingsFragment)
+                        val directions = PlotFragmentDirections.showSettingsFragment()
+                        navController.navigate(directions)
                         true
                     }
                     R.id.action_refresh -> {
@@ -69,7 +69,9 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
-                navController.navigate(R.id.showSettingsFragment)
+                val directions = PlotFragmentDirections.startWithSettingsFragment()
+                directions.isStart = true
+                navController.navigate(directions)
             } else {
                 binding.executeAfter {
                     this.device = it
@@ -91,7 +93,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         })
 
         viewModel.lastSensors.observe(viewLifecycleOwner, Observer {
-            Timber.e("Id: ${it.id}, Date, ${it.timeText} $it")
+            // Timber.e("Id: ${it.id}, Date, ${it.timeText} $it")
             binding.executeAfter {
                 sensors = it
             }
@@ -102,8 +104,8 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 //                Timber.e("Id: ${it.id}")
 //            }
 //        })
-
     }
+
 
     private fun setUpChart(chart: LineChart) {
         chart.apply {
