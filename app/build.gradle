@@ -48,6 +48,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktx_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
+    implementation "com.afollestad:recyclical:$recyclical_version"
+
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test:runner:$test_runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"

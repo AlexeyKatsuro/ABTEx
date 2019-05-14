@@ -10,16 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import com.afollestad.recyclical.datasource.DataSource
+import com.afollestad.recyclical.datasource.emptyDataSourceTyped
+import com.afollestad.recyclical.setup
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
 import com.e.btex.data.BtDevice
-import com.e.btex.data.mapToBtDevice
 import com.e.btex.databinding.FragmentSettingsBinding
-import com.e.btex.databinding.ItemBluettoothDeciveBinding
-import com.e.btex.ui.adapters.DataBoundAdapter
+import com.e.btex.databinding.ItemBluetoothDeciveBinding
 import com.e.btex.util.AutoSubscribeReceiver
 import com.e.btex.util.broadcastReceivers.BluetoothStateReceiver
 import com.e.btex.util.extensions.hideKeyboard
+import com.e.btex.util.extensions.includeItem
+import com.e.btex.util.extensions.onDataBindingBind
 import com.e.btex.util.extensions.toast
 import kotlin.reflect.KClass
 
@@ -37,9 +40,10 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
     private var onStateChangedReceiver
         by AutoSubscribeReceiver<BluetoothStateReceiver>()
 
-    val bleAdapter: BluetoothAdapter = getDefaultAdapter()
+    private val bleAdapter: BluetoothAdapter = getDefaultAdapter()
 
-    private lateinit var pairDeviceAdapter: DataBoundAdapter<BtDevice,ItemBluettoothDeciveBinding>
+    private val dataSourceTyped: DataSource<BtDevice> = emptyDataSourceTyped()
+
 
     private val isBtEnable: Boolean
         get() = bleAdapter.isEnabled
@@ -53,7 +57,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        if(args.isStart){
+        if (args.isStart) {
             binding.includeAppBar.toolBar.navigationIcon = null
         } else {
             binding.includeAppBar.toolBar.setNavigationOnClickListener {
@@ -71,18 +75,25 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
             }
         }
 
-        pairDeviceAdapter  = DataBoundAdapter(R.layout.item_bluettooth_decive, BtDevice::macAddress)
-        pairDeviceAdapter.setOnItemClickListener { _, _, item ->
-          //  BleService.startService(act.applicationContext,item)
-            viewModel.setTargetAddress(item.macAddress)
-            val directions = SettingsFragmentDirections.showPlotFragment()
-            navController.navigate(directions)
+
+        binding.pairedDeviceRecyclerView.setup {
+            withDataSource(dataSourceTyped)
+            includeItem<BtDevice>(R.layout.item_bluetooth_decive) {
+
+                onDataBindingBind(ItemBluetoothDeciveBinding::bind) { _, item ->
+                    itemBinding.isTarget = viewModel.targetAddress.value == item.macAddress
+                }
+
+                onClick {
+                    viewModel.setTargetAddress(item.macAddress)
+                    val directions = SettingsFragmentDirections.showPlotFragment()
+                    navController.navigate(directions)
+                }
+
+            }
         }
-
-
-        binding.pairedDeviceRecyclerView.adapter = pairDeviceAdapter
         updatePairedDevices()
-        binding.bluetoothSwitch.isChecked  = isBtEnable
+        binding.bluetoothSwitch.isChecked = isBtEnable
 
         return view
     }
@@ -107,7 +118,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
                 updatePairedDevices()
             }
 
-            override fun onStateTurningOff()  = Unit
+            override fun onStateTurningOff() = Unit
 
             override fun onStateTurningOn() = Unit
 
@@ -119,7 +130,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
         startActivityForResult(enableBtIntent, 0)
     }
 
-    private fun updatePairedDevices(){
-        pairDeviceAdapter.submitList(bleAdapter.bondedDevices.map { BtDevice(it.name,it.address) })
+    private fun updatePairedDevices() {
+        val devices = bleAdapter.bondedDevices.map { BtDevice(it.name, it.address) }
+        dataSourceTyped.set(devices)
     }
 }

@@ -69,14 +69,16 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/paired_device_recycler_view"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 app:layoutManager="LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:hasFixedSize="@{true}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_paired"
                 tools:itemCount="3"
-                tools:listitem="@layout/item_bluettooth_decive" />
+                tools:listitem="@layout/item_bluetooth_decive" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

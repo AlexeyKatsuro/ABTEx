@@ -6,7 +6,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorPrimaryDark">?attr/colorPrimaryVariant</item>
-
         <item name="colorSecondary">@color/colorSecondary</item>
 
         <item name="android:colorBackground">@color/colorBackground</item>
@@ -31,7 +30,7 @@
         <item name="popupTheme">@style/ThemeOverlay.BTEx.PopupOverlay</item>
     </style>
 
-    <style name="Widget.BTEx.Switch" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Widget.BTEx.Switch" parent="Widget.AppCompat.CompoundButton.Switch">
         <item name="colorPrimary">?attr/colorPrimary</item>
         <item name="colorPrimaryDark">?colorSecondaryVariant</item>
         <item name="colorAccent">?attr/colorSecondary</item>

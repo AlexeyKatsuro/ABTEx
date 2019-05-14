@@ -13,10 +13,12 @@ class SettingsViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository
 ) : BaseViewModel() {
 
+
     private val loadAdderssTrigger = MutableLiveData<Unit>()
     val targetAddress: LiveData<String?> = loadAdderssTrigger.map {
         deviceRepository.getTargetAddress()
     }
+
 
     init {
         loadAdderssTrigger.trigger()
