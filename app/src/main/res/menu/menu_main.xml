@@ -31,6 +31,7 @@
         android:id="@+id/action_turn_off"
         android:icon="@drawable/ic_turn_off"
         android:orderInCategory="4"
+        android:visible="false"
         android:title="@string/turn_off"
         app:showAsAction="never" />
 </menu>

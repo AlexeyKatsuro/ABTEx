@@ -15,6 +15,7 @@ import com.e.btex.util.Event
 import com.e.btex.util.extensions.mapToEvent
 import com.e.btex.util.extensions.switchMap
 import com.e.btex.util.extensions.trigger
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PlotViewModel @Inject constructor(
@@ -79,5 +80,12 @@ class PlotViewModel @Inject constructor(
     fun readLogs(fromId: Int, toId: Int) {
         sensorsRepository.readLogs(fromId, toId)
     }
+
+    fun gen(){
+        scope.launch {
+            sensorsRepository.generateTestData()
+        }
+    }
+
 
 }

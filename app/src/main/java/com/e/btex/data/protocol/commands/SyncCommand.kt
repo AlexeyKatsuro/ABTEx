@@ -9,6 +9,6 @@ class SyncCommand : OutCommand() {
         get() = 0
 
     override fun fillBody(buffer: ByteBuffer) {
-        buffer.putInt(UnixTimeUtils.currentUnixTime)
+        buffer.putInt(UnixTimeUtils.currentUnixTimeSeconds)
     }
 }

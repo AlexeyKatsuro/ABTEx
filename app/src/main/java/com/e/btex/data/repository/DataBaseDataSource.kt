@@ -3,6 +3,12 @@ package com.e.btex.data.repository
 import androidx.lifecycle.LiveData
 import com.e.btex.data.dao.SensorsDao
 import com.e.btex.data.entity.Sensors
+import com.e.btex.data.entity.getRandomValues
+import com.e.btex.util.UnixTimeUtils
+import com.e.btex.util.extensions.toFormattedStringUTC3
+import kotlinx.coroutines.delay
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,5 +45,23 @@ class DataBaseDataSource @Inject constructor(
 
     fun getLastId(): Int =
         sensorsDao.getLastId()
+
+    suspend fun generateTestData(){
+        val now = Date(UnixTimeUtils.currentUnixTimeMillis)
+        val c = Calendar.getInstance()
+        c.time = now
+        var count = sensorsDao.getLastId()
+        while (c.time <= now){
+            Timber.e(c.time.toFormattedStringUTC3())
+            c.add(Calendar.MINUTE, 1)
+            count++
+            sensorsDao.insert(Sensors.getRandomValues(count,(c.timeInMillis/1000).toInt()))
+        }
+        while (true){
+            delay(5000)
+            sensorsDao.insert(Sensors.getRandomValues(++count,(UnixTimeUtils.currentUnixTimeSeconds)))
+        }
+        Timber.e("count: $count")
+    }
 
 }

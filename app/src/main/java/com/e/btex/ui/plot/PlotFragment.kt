@@ -47,6 +47,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                     }
                     R.id.action_refresh -> {
                         viewModel.refreshConnection()
+                        viewModel.gen()
                         true
                     }
                     R.id.action_turn_off -> {
@@ -211,10 +212,12 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             is ServiceState.OnDestroyConnection,
             is ServiceState.OnFailedConnecting -> {
                 toolbar.subtitle = getString(R.string.state_offline)
+                toolbar.menu.findItem(R.id.action_turn_off).isVisible = false
             }
 
             is ServiceState.OnCreateConnection -> {
                 toolbar.subtitle = getString(R.string.state_online)
+                toolbar.menu.findItem(R.id.action_turn_off).isVisible = true
             }
         }
     }

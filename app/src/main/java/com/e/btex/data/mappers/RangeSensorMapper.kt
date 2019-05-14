@@ -11,7 +11,7 @@ class RangeSensorMapper @Inject constructor() : Mapper<ArrayLogData, List<Sensor
         return from.logList.mapIndexed { index, logRowData ->
             Sensors(
                 id = from.formId + index,
-                time = logRowData.rTime.toLong(),
+                time = logRowData.rTime,
                 temperature = logRowData.sensorsData.temperature.toFloat() / 100,
                 humidity = logRowData.sensorsData.humidity.toFloat() / 100,
                 co2 = logRowData.sensorsData.co2.toFloat(),

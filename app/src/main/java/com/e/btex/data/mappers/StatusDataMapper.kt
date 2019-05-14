@@ -1,7 +1,6 @@
 package com.e.btex.data.mappers
 
 import com.e.btex.data.entity.Sensors
-import com.e.btex.data.entity.SensorsData
 import com.e.btex.data.entity.StatusData
 import com.e.btex.util.UnixTimeUtils
 import javax.inject.Inject
@@ -12,7 +11,7 @@ class StatusDataMapper @Inject constructor() : Mapper<StatusData, Sensors> {
     override fun map(from: StatusData): Sensors {
         return Sensors(
             id = from.lastLogId,
-            time = UnixTimeUtils.currentUnixTime.toLong(),
+            time = UnixTimeUtils.currentUnixTimeSeconds,
             temperature = from.sensors.temperature.toFloat()/100,
             humidity = from.sensors.humidity.toFloat()/100,
             co2 = from.sensors.co2.toFloat(),

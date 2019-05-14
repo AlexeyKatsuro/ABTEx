@@ -61,4 +61,10 @@ class SensorsRepository @Inject constructor(
     fun readLogs(fromId: Int, toId: Int) {
         bluetoothDataSource.readLogs(fromId, toId)
     }
+
+    suspend fun generateTestData() {
+       withContext(Dispatchers.IO){
+           dataBaseDataSource.generateTestData()
+       }
+    }
 }

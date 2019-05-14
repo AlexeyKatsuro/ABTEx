@@ -3,10 +3,7 @@ package com.e.btex.util.extensions
 import android.app.DatePickerDialog
 import android.content.Context
 import androidx.fragment.app.Fragment
-import timber.log.Timber
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.util.*
 
 typealias DatePickerOptions = DatePickerDialog.() -> Unit
@@ -24,7 +21,7 @@ fun Context.showDatePickerDialog(
 ) {
     val onDateSelected = DatePickerDialog.OnDateSetListener { _, year, month, day ->
         val calendar = Calendar.getInstance().apply { set(year, month, day) }
-        val date = calendar.time.toFormattedString(pattern)
+        val date = calendar.time.toFormattedStringUTC3(pattern)
         callback(date)
     }
 
@@ -48,8 +45,12 @@ fun String.parseDate(pattern: String = defaultDatePattern): Date {
 
 }
 
-fun Date.toFormattedString(pattern: String = defaultDatePattern): String {
+fun Date.toFormattedStringUTC3(pattern: String = defaultDatePattern): String {
     val offset = TimeZone.getDefault().rawOffset + TimeZone.getDefault().dstSavings
     return SimpleDateFormat(pattern, Locale.getDefault()).format(Date(time-offset))
+}
+
+fun Date.toFormattedString(pattern: String = defaultDatePattern): String {
+    return SimpleDateFormat(pattern, Locale.getDefault()).format(Date(time))
 }
 
