@@ -13,12 +13,17 @@ import com.e.btex.data.ServiceState
 import com.e.btex.databinding.FragmentPlotBinding
 import com.e.btex.util.EventObserver
 import com.e.btex.util.extensions.executeAfter
+import com.e.btex.util.extensions.observeNotNull
+import com.e.btex.util.extensions.toFormattedStringUTC3
 import com.e.btex.util.extensions.toast
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import java.util.*
 import kotlin.reflect.KClass
 
 
@@ -47,11 +52,14 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                     }
                     R.id.action_refresh -> {
                         viewModel.refreshConnection()
-                        viewModel.gen()
                         true
                     }
                     R.id.action_turn_off -> {
                         viewModel.closeConnection()
+                        true
+                    }
+                    R.id.action_generate -> {
+                        viewModel.generate()
                         true
                     }
                     else -> false
@@ -93,12 +101,13 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             }
         })
 
-        viewModel.lastSensors.observe(viewLifecycleOwner, Observer {
+        viewModel.lastSensors.observeNotNull(viewLifecycleOwner){
             // Timber.e("Id: ${it.id}, Date, ${it.timeText} $it")
+            addNewSensorVal(it.temperature, it.timeMillis)
             binding.executeAfter {
                 sensors = it
             }
-        })
+        }
 
 //        viewModel.allSensors.observe(viewLifecycleOwner, Observer {
 //            it.forEach {
@@ -115,15 +124,13 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             description.isEnabled = false
             // enable scaling and dragging
             // xAxis.granularity  = 1f
-//            xAxis.valueFormatter = object : IAxisValueFormatter {
-//                private val mFormat = SimpleDateFormat("HH:mm:ss", Locale.ROOT)
-//                override fun getFormattedValue(value: Float, axis: AxisBase): String {
-//                    val millis = TimeUnit.HOURS.toMillis(value.toLong())
-//                    return value.toString()
-//                    //return mFormat.format(Date(millis))
-//                }
-//
-//            }
+            xAxis.valueFormatter = object : IAxisValueFormatter {
+                override fun getFormattedValue(value: Float, axis: AxisBase): String {
+                    //val millis = TimeUnit.HOURS.toMillis(value.toLong())
+                    return Date(value.toLong()).toFormattedStringUTC3()
+                }
+
+            }
             setDragEnabled(true)
             setScaleEnabled(true)
             setDrawGridBackground(false)

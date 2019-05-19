@@ -13,7 +13,7 @@ import java.util.Date
 data class Sensors(
     @PrimaryKey
     var id: Int,
-    val time: Int, //seconds
+    val timeSeconds: Int, //seconds
     val temperature: Float,
     val humidity: Float,
     val co2: Float,
@@ -25,7 +25,13 @@ data class Sensors(
 
     @IgnoredOnParcel
     @Ignore
-    val timeText: String = Date(time*1000L).toFormattedStringUTC3()
+    val timeMillis: Long = timeSeconds*1000L
+
+    @IgnoredOnParcel
+    @Ignore
+    val timeText: String = Date(timeMillis).toFormattedStringUTC3()
+
+
 
     companion object
 }

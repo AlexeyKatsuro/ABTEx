@@ -81,7 +81,7 @@ class PlotViewModel @Inject constructor(
         sensorsRepository.readLogs(fromId, toId)
     }
 
-    fun gen(){
+    fun generate(){
         scope.launch {
             sensorsRepository.generateTestData()
         }

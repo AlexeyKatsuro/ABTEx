@@ -11,7 +11,7 @@ class StatusDataMapper @Inject constructor() : Mapper<StatusData, Sensors> {
     override fun map(from: StatusData): Sensors {
         return Sensors(
             id = from.lastLogId,
-            time = UnixTimeUtils.currentUnixTimeSeconds,
+            timeSeconds = UnixTimeUtils.currentUnixTimeSeconds,
             temperature = from.sensors.temperature.toFloat()/100,
             humidity = from.sensors.humidity.toFloat()/100,
             co2 = from.sensors.co2.toFloat(),

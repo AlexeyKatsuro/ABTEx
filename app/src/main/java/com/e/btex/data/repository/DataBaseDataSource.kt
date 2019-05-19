@@ -50,18 +50,21 @@ class DataBaseDataSource @Inject constructor(
         val now = Date(UnixTimeUtils.currentUnixTimeMillis)
         val c = Calendar.getInstance()
         c.time = now
+        c.add(Calendar.DATE, -2)
         var count = sensorsDao.getLastId()
         while (c.time <= now){
             Timber.e(c.time.toFormattedStringUTC3())
-            c.add(Calendar.MINUTE, 1)
+            c.add(Calendar.SECOND, 10)
             count++
             sensorsDao.insert(Sensors.getRandomValues(count,(c.timeInMillis/1000).toInt()))
         }
+
         while (true){
-            delay(5000)
+            delay(10000)
             sensorsDao.insert(Sensors.getRandomValues(++count,(UnixTimeUtils.currentUnixTimeSeconds)))
+            Timber.e("count: $count")
         }
-        Timber.e("count: $count")
+
     }
 
 }

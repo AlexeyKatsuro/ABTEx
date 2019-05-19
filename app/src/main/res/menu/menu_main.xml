@@ -34,4 +34,11 @@
         android:visible="false"
         android:title="@string/turn_off"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_generate"
+        android:orderInCategory="5"
+        android:visible="true"
+        android:title="Генерировать тестовые данные"
+        app:showAsAction="never" />
 </menu>
