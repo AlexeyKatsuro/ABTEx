@@ -48,6 +48,18 @@ fun Sensors.getSensorMap(): Map<SensorsType, Float> {
     )
 }
 
+fun Sensors.getSensorValue(type: SensorsType): Float {
+    return when (type) {
+        SensorsType.temperature -> temperature
+        SensorsType.humidity -> humidity
+        SensorsType.co2 -> co2
+        SensorsType.pm1 -> pm1
+        SensorsType.pm10 -> pm10
+        SensorsType.pm25 -> pm25
+        SensorsType.tvoc -> tvoc
+    }
+}
+
 fun Sensors.Companion.getRandomValues(id: Int, time: Int): Sensors {
     return Sensors(
         id,

@@ -16,6 +16,7 @@ import com.e.btex.util.extensions.mapToEvent
 import com.e.btex.util.extensions.switchMap
 import com.e.btex.util.extensions.trigger
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class PlotViewModel @Inject constructor(
@@ -37,7 +38,9 @@ class PlotViewModel @Inject constructor(
     val loading: LiveData<LoadingData>
         get() = _loading
 
-
+    private val _lastCount = MutableLiveData<List<Sensors>>()
+    val lastCount: LiveData<List<Sensors>>
+        get() = _lastCount
 
     private val loadDeviceTrigger = MutableLiveData<Unit>()
     val targetDevice: LiveData<Event<BtDevice?>> = loadDeviceTrigger.mapToEvent {
@@ -84,6 +87,16 @@ class PlotViewModel @Inject constructor(
     fun generate(){
         scope.launch {
             sensorsRepository.generateTestData()
+        }
+    }
+
+    fun getLastSensorsCount(count: Int) {
+        load( call = {sensorsRepository.getLastSensorsCount(count)}){
+            _lastCount.value = it
+            it.forEach {
+                Timber.d("$it")
+            }
+
         }
     }
 

@@ -55,8 +55,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_mini"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/temperature_val(sensors.temperature)}"
             app:layout_constraintBottom_toBottomOf="@+id/image_temperature"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
             app:layout_constraintTop_toTopOf="@+id/image_temperature"
             tools:text="25" />
@@ -86,11 +88,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/humidity_val(sensors.humidity)}"
             app:layout_constraintBottom_toBottomOf="@+id/image_humidity"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
             app:layout_constraintTop_toTopOf="@+id/image_humidity"
-            tools:text="Temperature: 25" />
+            tools:text="40%" />
 
         <ImageView
             android:id="@+id/image_co2"
@@ -117,8 +121,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_mini"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/co2_val(sensors.co2)}"
             app:layout_constraintBottom_toBottomOf="@+id/image_co2"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
             app:layout_constraintTop_toTopOf="@+id/image_co2"
             tools:text="455" />
@@ -148,8 +154,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_mini"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/pm1_val(sensors.pm1)}"
             app:layout_constraintBottom_toBottomOf="@+id/image_pm"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
             app:layout_constraintTop_toTopOf="@+id/image_pm"
             tools:text="1" />
@@ -170,7 +178,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_mini"
             android:layout_marginTop="@dimen/spacing_mini"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/pm25_val(sensors.pm25)}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
             app:layout_constraintTop_toBottomOf="@+id/label_pm1"
             tools:text="0" />
@@ -191,7 +201,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_mini"
             android:layout_marginTop="@dimen/spacing_mini"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/pm10_val(sensors.pm10)}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
             app:layout_constraintTop_toBottomOf="@+id/label_pm25"
             tools:text="0" />
@@ -223,10 +235,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_mini"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@{@string/tvoc_val(sensors.tvoc)}"
             app:layout_constraintBottom_toBottomOf="@+id/image_tvoc"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/barrier"
-            app:layout_constraintTop_toTopOf="@+id/image_tvoc" />
+            app:layout_constraintTop_toTopOf="@+id/image_tvoc"
+            tools:text="1" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"

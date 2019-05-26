@@ -1,7 +1,10 @@
 package com.e.btex.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.e.btex.data.entity.Sensors
 
 @Dao
@@ -32,13 +35,16 @@ interface SensorsDao {
     @Query("SELECT * FROM sensors WHERE id = (SELECT MAX(id) FROM sensors)")
     fun getLastSensor(): Sensors
 
+    @Query("SELECT * FROM sensors WHERE id > (SELECT MAX(id) FROM sensors) - :count")
+    fun getLastCountSensor(count: Int): List<Sensors>
+
     @Query("SELECT * FROM sensors WHERE id =:id")
     fun getSensors(id: Int): Sensors
 
-    @Insert(onConflict =  OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(sensors: Sensors)
 
-    @Insert(onConflict =  OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(sensorsList: List<Sensors>)
 
     @Query("DELETE FROM sensors")

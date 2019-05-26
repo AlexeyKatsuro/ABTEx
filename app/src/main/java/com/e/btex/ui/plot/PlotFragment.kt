@@ -9,21 +9,18 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
+import com.e.btex.data.SensorsType
 import com.e.btex.data.ServiceState
 import com.e.btex.databinding.FragmentPlotBinding
 import com.e.btex.util.EventObserver
 import com.e.btex.util.extensions.executeAfter
 import com.e.btex.util.extensions.observeNotNull
-import com.e.btex.util.extensions.toFormattedStringUTC3
+import com.e.btex.util.extensions.observeValue
 import com.e.btex.util.extensions.toast
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import java.util.*
 import kotlin.reflect.KClass
 
 
@@ -65,16 +62,26 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                     else -> false
                 }
             }
+
+
+        }
+        binding.bottomSheetValues.apply {
+            valueTemperature.setOnClickListener { binding.chart.setSensorsType(SensorsType.temperature) }
+            valueHumidity.setOnClickListener { binding.chart.setSensorsType(SensorsType.humidity) }
+            valueCo2.setOnClickListener { binding.chart.setSensorsType(SensorsType.co2) }
+            valuePm1.setOnClickListener { binding.chart.setSensorsType(SensorsType.pm1) }
+            valuePm25.setOnClickListener { binding.chart.setSensorsType(SensorsType.pm25) }
+            valuePm10.setOnClickListener { binding.chart.setSensorsType(SensorsType.pm10) }
+            valueTvoc.setOnClickListener { binding.chart.setSensorsType(SensorsType.tvoc) }
         }
 
-        setUpChart(binding.chart)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadTargetAddress()
-
+        viewModel.getLastSensorsCount(1000)
 
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
@@ -101,11 +108,17 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             }
         })
 
-        viewModel.lastSensors.observeNotNull(viewLifecycleOwner){
+        viewModel.lastSensors.observeNotNull(viewLifecycleOwner) {
             // Timber.e("Id: ${it.id}, Date, ${it.timeText} $it")
-            addNewSensorVal(it.temperature, it.timeMillis)
             binding.executeAfter {
                 sensors = it
+            }
+        }
+
+        viewModel.lastCount.observeValue(viewLifecycleOwner) {
+
+            if (it.isNotEmpty()) {
+                binding.chart.setSensors(it)
             }
         }
 
@@ -116,29 +129,6 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 //        })
     }
 
-
-    private fun setUpChart(chart: LineChart) {
-        chart.apply {
-            // enable touch gestures
-            setTouchEnabled(true)
-            description.isEnabled = false
-            // enable scaling and dragging
-            // xAxis.granularity  = 1f
-            xAxis.valueFormatter = object : IAxisValueFormatter {
-                override fun getFormattedValue(value: Float, axis: AxisBase): String {
-                    //val millis = TimeUnit.HOURS.toMillis(value.toLong())
-                    return Date(value.toLong()).toFormattedStringUTC3()
-                }
-
-            }
-            setDragEnabled(true)
-            setScaleEnabled(true)
-            setDrawGridBackground(false)
-
-            // if disabled, scaling can be done on x- and y-axis separately
-            setPinchZoom(true)
-        }
-    }
 
     private fun addNewSensorVal(value: Float, time: Long) {
 

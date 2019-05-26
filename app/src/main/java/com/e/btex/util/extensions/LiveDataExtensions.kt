@@ -6,13 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import com.e.btex.util.Event
+import com.e.btex.util.EventObserver
 
-inline fun <T> LiveData<T>.observeK(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
+inline fun <T> LiveData<T>.observeValue(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
     this.observe(owner, Observer { observer(it) })
 }
 
 inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
     this.observe(owner, Observer { it?.run(observer) })
+}
+
+inline fun <T> LiveData<Event<T>>.observeEvent(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
+    this.observe(owner, EventObserver { it?.run(observer) })
 }
 
 /** Uses `Transformations.map` on a LiveData */

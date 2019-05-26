@@ -69,4 +69,8 @@ class DataBaseDataSource @Inject constructor(
 
     }
 
+    fun getLastSensorsCount(count: Int): List<Sensors> {
+        return sensorsDao.getLastCountSensor(count)
+    }
+
 }

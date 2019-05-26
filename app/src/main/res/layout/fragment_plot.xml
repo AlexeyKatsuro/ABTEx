@@ -62,7 +62,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <com.github.mikephil.charting.charts.LineChart
+                <com.e.btex.ui.widgets.SensorsPlot
                     android:id="@+id/chart"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -74,6 +74,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
+            android:id="@+id/bottom_sheet_values"
             layout="@layout/bottom_sheet_sensors_values"
             app:sensors="@{sensors}" />
 

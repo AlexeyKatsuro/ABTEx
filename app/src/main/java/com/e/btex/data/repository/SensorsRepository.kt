@@ -67,4 +67,10 @@ class SensorsRepository @Inject constructor(
            dataBaseDataSource.generateTestData()
        }
     }
+
+    suspend fun getLastSensorsCount(count: Int): List<Sensors> {
+       return withContext(Dispatchers.IO){
+            dataBaseDataSource.getLastSensorsCount(count)
+        }
+    }
 }
