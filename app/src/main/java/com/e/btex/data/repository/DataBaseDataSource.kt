@@ -43,7 +43,7 @@ class DataBaseDataSource @Inject constructor(
     fun wipe() =
         sensorsDao.wipe()
 
-    fun getLastId(): Int =
+    fun getLastId(): Int? =
         sensorsDao.getLastId()
 
     suspend fun generateTestData(){
@@ -51,12 +51,14 @@ class DataBaseDataSource @Inject constructor(
         val c = Calendar.getInstance()
         c.time = now
         c.add(Calendar.DATE, -2)
-        var count = sensorsDao.getLastId()
-        while (c.time <= now){
-            Timber.e(c.time.toFormattedStringUTC3())
-            c.add(Calendar.SECOND, 10)
-            count++
-            sensorsDao.insert(Sensors.getRandomValues(count,(c.timeInMillis/1000).toInt()))
+        var count = sensorsDao.getLastId()?: 0
+        if(count==0) {
+            while (c.time <= now) {
+                Timber.e(c.time.toFormattedStringUTC3())
+                c.add(Calendar.SECOND, 10)
+                count++
+                sensorsDao.insert(Sensors.getRandomValues(count, (c.timeInMillis / 1000).toInt()))
+            }
         }
 
         while (true){

@@ -3,6 +3,9 @@
     <string name="settings">Настройки</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="ble_devices">Устройства</string>
+    
+    <string name="notification_title">@string/app_name</string>
+    <string name="notification_content">Bluetooth соединение с датчиком качества воздука</string>
 
     <string name="connect">Подключится</string>
     <string name="refresh">Перезагрузить</string>

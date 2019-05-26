@@ -21,9 +21,11 @@ import com.e.btex.data.protocol.RemoteData
 import com.e.btex.data.protocol.commands.OutCommand
 import com.e.btex.data.protocol.commands.ReadCommand
 import com.e.btex.data.protocol.commands.SyncCommand
+import com.e.btex.util.NotificationUtils
 import dagger.android.AndroidInjection
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class AqsService : BleService(), AqsInterface {
 
@@ -38,6 +40,8 @@ class AqsService : BleService(), AqsInterface {
 
     companion object {
         private const val ARG_RESULT_RECEIVER = "arg_result_receiver"
+        private const val CHANNEL_ID ="1234 Channel ID"
+        private const val NOTIFICATION_ID = 1234
 
         var instance: AqsService? = null
 
@@ -113,7 +117,7 @@ class AqsService : BleService(), AqsInterface {
                 sensorsDao.insertAll(rangeDataMapper.map(data))
             }
             is StatusData -> {
-                val lastStorageId = sensorsDao.getLastId()
+                val lastStorageId = sensorsDao.getLastId() ?: 0
                 val lastAqsId = data.lastLogId
                 Timber.e("Status: lastStorageId: $lastStorageId, lastAqsId: $lastAqsId")
                 if (lastAqsId == lastStorageId + 1) {
@@ -134,6 +138,7 @@ class AqsService : BleService(), AqsInterface {
     override fun onCreate() {
         AndroidInjection.inject(this)
         super.onCreate()
+        NotificationUtils.createNotificationCompat(this, NOTIFICATION_ID, CHANNEL_ID)
         instance = this
     }
 
@@ -141,4 +146,6 @@ class AqsService : BleService(), AqsInterface {
         super.onDestroy()
         instance = null
     }
+
 }
+

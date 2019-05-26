@@ -27,7 +27,7 @@ interface SensorsDao {
     fun getInTimeRange(from: Long, to: Long): List<Sensors>
 
     @Query("SELECT MAX(id) FROM sensors")
-    fun getLastId(): Int
+    fun getLastId(): Int?
 
     @Query("SELECT * FROM sensors WHERE id = (SELECT MAX(id) FROM sensors)")
     fun getLastSensor(): Sensors

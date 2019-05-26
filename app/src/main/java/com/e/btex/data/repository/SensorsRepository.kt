@@ -43,7 +43,7 @@ class SensorsRepository @Inject constructor(
         }
     }
 
-    suspend fun getLastId(): Int {
+    suspend fun getLastId(): Int? {
         return withContext(Dispatchers.IO) {
             dataBaseDataSource.getLastId()
         }
