@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="databaseSize"
+            type="Integer" />
+
+        <variable
+            name="lastId"
+            type="String" />
+
+        <variable
+            name="lastTime"
+            type="String" />
+        <variable
+            name="isDeviceOnline"
+            type="Boolean" />
+
+        <variable
+            name="model"
+            type="com.e.btex.ui.datebase.DatabaseInfoViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tool_bar"
+            android:layout_width="match_parent"
+            style="@style/Widget.BTEx.Toolbar"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="?homeAsUpIndicator"
+            app:title="@string/database"
+            tools:title="@string/app_name" />
+
+        <TextView
+            android:id="@+id/label_locale_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/locale_db_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar" />
+
+        <TextView
+            android:id="@+id/label_last_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/last_log_id"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/value_size" />
+
+        <TextView
+            android:id="@+id/label_last_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/last_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label_last_id" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="label_last_id,label_last_time,label_locale_size"
+            tools:layout_editor_absoluteX="411dp" />
+
+        <TextView
+            android:id="@+id/value_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:text="@{String.valueOf(databaseSize)}"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintBaseline_toBaselineOf="@id/label_locale_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            tools:text="1540912" />
+
+        <TextView
+            android:id="@+id/value_last_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:text="@{lastId}"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintBaseline_toBaselineOf="@id/label_last_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            tools:text="1540912" />
+
+        <TextView
+            android:id="@+id/value_last_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:text="@{lastTime}"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintBaseline_toBaselineOf="@id/label_last_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            tools:text="18:11:44 26/05/2019" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_remove_remote"
+            style="@style/Widget.BTEx.MaterialButton.Outline.Error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            app:visibleInvisible="@{isDeviceOnline}"
+            android:text="@string/action_remove_remote"
+            app:layout_constraintBottom_toTopOf="@id/button_remove_locale"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_remove_locale"
+            style="@style/Widget.BTEx.MaterialButton.Unelevated.Error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
+            android:text="@string/action_remove_locale"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

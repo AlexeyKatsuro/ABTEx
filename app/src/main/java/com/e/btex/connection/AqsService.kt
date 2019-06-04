@@ -20,6 +20,7 @@ import com.e.btex.data.protocol.ProtocolDataParser
 import com.e.btex.data.protocol.RemoteData
 import com.e.btex.data.protocol.commands.OutCommand
 import com.e.btex.data.protocol.commands.ReadCommand
+import com.e.btex.data.protocol.commands.ResetStorage
 import com.e.btex.data.protocol.commands.SyncCommand
 import com.e.btex.util.NotificationUtils
 import dagger.android.AndroidInjection
@@ -66,6 +67,10 @@ class AqsService : BleService(), AqsInterface {
 
     override fun readLogs(fromId: Int, toId: Int) {
         sendCommand(ReadCommand(fromId, toId))
+    }
+
+    override fun resetStorage() {
+        sendCommand(ResetStorage())
     }
 
     private fun sendCommand(command: OutCommand) {

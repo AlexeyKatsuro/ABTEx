@@ -37,7 +37,6 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-
         binding.toolbar.apply {
             inflateMenu(R.menu.menu_main)
             setOnMenuItemClickListener {
@@ -55,8 +54,9 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                         viewModel.closeConnection()
                         true
                     }
-                    R.id.action_generate -> {
-                        viewModel.generate()
+                    R.id.action_database -> {
+                        val direction = PlotFragmentDirections.showDatabaseInfoFragment()
+                        navController.navigate(direction)
                         true
                     }
                     else -> false
@@ -82,7 +82,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadTargetAddress()
         viewModel.getLastSensorsCount(1000)
-
+        navController
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
                 val directions = PlotFragmentDirections.startWithSettingsFragment()
@@ -109,7 +109,6 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         })
 
         viewModel.lastSensors.observeNotNull(viewLifecycleOwner) {
-            // Timber.e("Id: ${it.id}, Date, ${it.timeText} $it")
             binding.executeAfter {
                 sensors = it
             }
@@ -122,11 +121,6 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             }
         }
 
-//        viewModel.allSensors.observe(viewLifecycleOwner, Observer {
-//            it.forEach {
-//                Timber.e("Id: ${it.id}")
-//            }
-//        })
     }
 
 

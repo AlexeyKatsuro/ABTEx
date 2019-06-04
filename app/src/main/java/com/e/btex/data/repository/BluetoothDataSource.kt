@@ -64,8 +64,10 @@ class BluetoothDataSource @Inject constructor(
         if (AqsService.instance == null) {
             AqsService.startService(context, device, callback)
         }
-        return state
+        return state //TODO State doesn't update
     }
+
+    fun getServiceState(): LiveData<ServiceState> = state //TODO State doesn't update
 
     fun closeConnection(){
         AqsService.instance?.stopSelf()
@@ -73,5 +75,8 @@ class BluetoothDataSource @Inject constructor(
 
     fun readLogs(fromId: Int, toId: Int){
         AqsService.instance?.readLogs(fromId, toId)
+    }
+    fun resetStorage(){
+        AqsService.instance?.resetStorage()
     }
 }

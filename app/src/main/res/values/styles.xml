@@ -26,7 +26,7 @@
 
     <style name="Widget.BTEx.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:theme">@style/Theme.BTEx</item>
+        <item name="android:theme">@style/ThemeOverlay.BTEx.AppBarOverlay</item>
         <item name="popupTheme">@style/ThemeOverlay.BTEx.PopupOverlay</item>
     </style>
 
@@ -34,6 +34,20 @@
         <item name="colorPrimary">?attr/colorPrimary</item>
         <item name="colorPrimaryDark">?colorSecondaryVariant</item>
         <item name="colorAccent">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Widget.BTEx.MaterialButton" parent="Widget.MaterialComponents.Button"/>
+    <style name="Widget.BTEx.MaterialButton.Outline" parent="Widget.MaterialComponents.Button.OutlinedButton"/>
+    <style name="Widget.BTEx.MaterialButton.Unelevated" parent="Widget.MaterialComponents.Button.UnelevatedButton"/>
+
+    <style name="Widget.BTEx.MaterialButton.Outline.Error">
+        <item name="strokeColor">?colorError</item>
+        <item name="android:textColor">?colorError</item>
+
+    </style>
+    <style name="Widget.BTEx.MaterialButton.Unelevated.Error">
+        <item name="backgroundTint">?colorError</item>
+        <item name="android:textColor">?colorOnError</item>
     </style>
 
     <style name="Widget.BTEx.HorizontalLine">

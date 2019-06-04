@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BTEx</string>
+    <string name="app_name">AQS</string>
     <string name="settings">Настройки</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="ble_devices">Устройства</string>
@@ -7,13 +7,18 @@
     <string name="notification_title">@string/app_name</string>
     <string name="notification_content">Bluetooth соединение с датчиком качества воздука</string>
 
-    <string name="connect">Подключится</string>
-    <string name="refresh">Перезагрузить</string>
-    <string name="turn_off">Отключится</string>
-    <string name="clear">Стереть</string>
+    <string name="action_connect">Подключится</string>
+    <string name="action_refresh">Перезагрузить</string>
+    <string name="action_turn_off">Отключится</string>
+    <string name="action_remove_locale">Очистить локальное хранилище</string>
+    <string name="action_remove_remote">Очистить удаленное хранилище</string>
 
     <string name="paired_devices">Подключенные устройства</string>
+    <string name="database">База данных</string>
     <string name="no_data">Нет данных</string>
+    <string name="locale_db_size">Размер локального хранилища:</string>
+    <string name="last_log_id">Номер последней записи:</string>
+    <string name="last_time">Время последней записи:</string>
 
     <string name="state_connecting">Подключение…</string>
     <string name="state_connected">Подключено</string>

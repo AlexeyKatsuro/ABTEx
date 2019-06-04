@@ -49,4 +49,7 @@ interface SensorsDao {
 
     @Query("DELETE FROM sensors")
     fun wipe()
+
+    @Query("SELECT COUNT(id) FROM sensors")
+    fun getDatabaseSize() : LiveData<Int>
 }

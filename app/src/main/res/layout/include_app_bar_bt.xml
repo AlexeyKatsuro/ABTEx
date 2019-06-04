@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -26,9 +27,9 @@
                 android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:contentInsetRight="@dimen/margin_normal"
                 app:navigationIcon="?homeAsUpIndicator"
-                app:title="@string/settings">
+                app:title="@{title}"
+                tools:title="@string/app_name">
 
 
             </androidx.appcompat.widget.Toolbar>

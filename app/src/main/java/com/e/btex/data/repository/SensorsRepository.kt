@@ -37,11 +37,12 @@ class SensorsRepository @Inject constructor(
         }
     }
 
-    suspend fun wipe() {
+    suspend fun resetLocaleStore() {
         withContext(Dispatchers.IO) {
             dataBaseDataSource.wipe()
         }
     }
+    fun getDatabaseSize() : LiveData<Int> = dataBaseDataSource.getDatabaseSize()
 
     suspend fun getLastId(): Int? {
         return withContext(Dispatchers.IO) {
@@ -60,6 +61,9 @@ class SensorsRepository @Inject constructor(
 
     fun readLogs(fromId: Int, toId: Int) {
         bluetoothDataSource.readLogs(fromId, toId)
+    }
+    fun resetRemoteStorage() {
+        bluetoothDataSource.resetStorage()
     }
 
     suspend fun generateTestData() {

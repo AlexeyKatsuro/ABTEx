@@ -22,4 +22,6 @@ class DeviceRepository @Inject constructor(
             bluetoothDataSource.getBtDevice(it)
         }
     }
+
+    fun getServiceState() = bluetoothDataSource.getServiceState()
 }

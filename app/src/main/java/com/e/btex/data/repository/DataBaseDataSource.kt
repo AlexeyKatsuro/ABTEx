@@ -15,9 +15,9 @@ import javax.inject.Singleton
 @Singleton
 class DataBaseDataSource @Inject constructor(
     private val sensorsDao: SensorsDao
-){
+) {
     fun getInTimeRangeLD(from: Long, to: Long): LiveData<List<Sensors>> =
-        sensorsDao.getInTimeRangeLD(from,to)
+        sensorsDao.getInTimeRangeLD(from, to)
 
     fun getAllSensorsLD(): LiveData<List<Sensors>> =
         sensorsDao.getAllSensorsLD()
@@ -32,7 +32,7 @@ class DataBaseDataSource @Inject constructor(
         sensorsDao.getAllSensors()
 
     fun getInTimeRange(from: Long, to: Long): List<Sensors> =
-        sensorsDao.getInTimeRange(from,to)
+        sensorsDao.getInTimeRange(from, to)
 
     fun insertAll(sensorsList: List<Sensors>) =
         sensorsDao.insertAll(sensorsList)
@@ -40,19 +40,20 @@ class DataBaseDataSource @Inject constructor(
     fun insert(sensors: Sensors) =
         sensorsDao.insert(sensors)
 
-    fun wipe() =
-        sensorsDao.wipe()
+    fun wipe() = sensorsDao.wipe()
+
+    fun getDatabaseSize(): LiveData<Int> = sensorsDao.getDatabaseSize()
 
     fun getLastId(): Int? =
         sensorsDao.getLastId()
 
-    suspend fun generateTestData(){
+    suspend fun generateTestData() {
         val now = Date(UnixTimeUtils.currentUnixTimeMillis)
         val c = Calendar.getInstance()
         c.time = now
         c.add(Calendar.DATE, -2)
-        var count = sensorsDao.getLastId()?: 0
-        if(count==0) {
+        var count = sensorsDao.getLastId() ?: 0
+        if (count == 0) {
             while (c.time <= now) {
                 Timber.e(c.time.toFormattedStringUTC3())
                 c.add(Calendar.SECOND, 10)
@@ -61,9 +62,9 @@ class DataBaseDataSource @Inject constructor(
             }
         }
 
-        while (true){
+        while (true) {
             delay(10000)
-            sensorsDao.insert(Sensors.getRandomValues(++count,(UnixTimeUtils.currentUnixTimeSeconds)))
+            sensorsDao.insert(Sensors.getRandomValues(++count, (UnixTimeUtils.currentUnixTimeSeconds)))
             Timber.e("count: $count")
         }
 

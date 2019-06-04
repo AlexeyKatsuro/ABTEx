@@ -51,6 +51,18 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="databaseInfoFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="253" />
+                            <option name="y" value="-300" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="plotFragment">
                     <value>
                       <LayoutPositions>
@@ -62,6 +74,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="action_plotFragment_to_databaseInfoFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="showSettingsFragment">
                               <value>
                                 <LayoutPositions />

@@ -4,4 +4,5 @@ interface AqsInterface {
 
     fun sync()
     fun readLogs(fromId: Int, toId: Int)
+    fun resetStorage()
 }

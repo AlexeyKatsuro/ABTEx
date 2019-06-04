@@ -9,6 +9,7 @@
 
         <include
             android:id="@+id/include_app_bar"
+            app:title="@{@string/settings}"
             layout="@layout/include_app_bar_bt" />
 
 

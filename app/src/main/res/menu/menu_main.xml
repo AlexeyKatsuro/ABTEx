@@ -7,7 +7,7 @@
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_refresh"
         android:orderInCategory="1"
-        android:title="@string/refresh"
+        android:title="@string/action_refresh"
         android:visible="false"
         app:showAsAction="ifRoom" />
 
@@ -15,7 +15,7 @@
         android:id="@+id/action_connect"
         android:icon="@drawable/ic_connect"
         android:orderInCategory="2"
-        android:title="@string/connect"
+        android:title="@string/action_connect"
         android:visible="false"
         app:showAsAction="never" />
 
@@ -32,13 +32,13 @@
         android:icon="@drawable/ic_turn_off"
         android:orderInCategory="4"
         android:visible="false"
-        android:title="@string/turn_off"
+        android:title="@string/action_turn_off"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_generate"
+        android:id="@+id/action_database"
         android:orderInCategory="5"
         android:visible="true"
-        android:title="Генерировать тестовые данные"
+        android:title="@string/database"
         app:showAsAction="never" />
 </menu>
