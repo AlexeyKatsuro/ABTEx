@@ -1,6 +1,7 @@
 package com.e.btex.ui.datebase
 
 import com.e.btex.base.BaseViewModel
+import com.e.btex.data.ServiceState
 import com.e.btex.data.ServiceStates
 import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.data.repository.SensorsRepository
@@ -17,7 +18,7 @@ class DatabaseInfoViewModel @Inject constructor(
     val dataBaseSize = sensorsRepository.getDatabaseSize()
     val lastSensor = sensorsRepository.getLastSensorsLD()
     val isServiceOnline = deviceRepository.getServiceState().map {
-        it == ServiceStates.CreateConnection || it == ServiceStates.OnReceiveData
+        it is ServiceState.OnCreateConnection || it is ServiceState.OnReceiveData
     }
 
     fun resetLocaleStore(){

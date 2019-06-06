@@ -10,8 +10,8 @@
     <string name="action_connect">Подключится</string>
     <string name="action_refresh">Перезагрузить</string>
     <string name="action_turn_off">Отключится</string>
-    <string name="action_remove_locale">Очистить локальное хранилище</string>
-    <string name="action_remove_remote">Очистить удаленное хранилище</string>
+    <string name="action_remove_locale">Очистить локально</string>
+    <string name="action_remove_all">Очистить везде</string>
 
     <string name="paired_devices">Подключенные устройства</string>
     <string name="database">База данных</string>

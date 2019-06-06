@@ -34,8 +34,9 @@ class DatabaseInfoFragment : BaseFragment<FragmentDatebaseBinding, DatabaseInfoV
                 viewModel.resetLocaleStore()
             }
 
-            buttonRemoveRemote.setOnClickListener {
+            buttonRemoveAll.setOnClickListener {
                 viewModel.resetRemoteStore()
+                viewModel.resetLocaleStore()
             }
         }
 

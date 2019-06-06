@@ -46,8 +46,8 @@
 
     </style>
     <style name="Widget.BTEx.MaterialButton.Unelevated.Error">
-        <item name="backgroundTint">?colorError</item>
-        <item name="android:textColor">?colorOnError</item>
+        <item name="colorPrimary">?colorError</item>
+        <item name="colorOnPrimary">?colorOnError</item>
     </style>
 
     <style name="Widget.BTEx.HorizontalLine">

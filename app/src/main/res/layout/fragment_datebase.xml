@@ -16,6 +16,7 @@
         <variable
             name="lastTime"
             type="String" />
+
         <variable
             name="isDeviceOnline"
             type="Boolean" />
@@ -31,8 +32,8 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tool_bar"
-            android:layout_width="match_parent"
             style="@style/Widget.BTEx.Toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -119,25 +120,25 @@
             tools:text="18:11:44 26/05/2019" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_remove_remote"
+            android:id="@+id/button_remove_locale"
             style="@style/Widget.BTEx.MaterialButton.Outline.Error"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
-            app:visibleInvisible="@{isDeviceOnline}"
-            android:text="@string/action_remove_remote"
-            app:layout_constraintBottom_toTopOf="@id/button_remove_locale"
+            android:text="@string/action_remove_locale"
+            app:layout_constraintBottom_toTopOf="@id/button_remove_all"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_remove_locale"
-            style="@style/Widget.BTEx.MaterialButton.Unelevated.Error"
+            android:id="@+id/button_remove_all"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_normal"
-            android:text="@string/action_remove_locale"
+            android:enabled="@{isDeviceOnline}"
+            android:text="@string/action_remove_all"
+            android:theme="@style/Widget.BTEx.MaterialButton.Unelevated.Error"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
