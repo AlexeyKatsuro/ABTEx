@@ -41,10 +41,10 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
                 .order(ByteOrder.LITTLE_ENDIAN)
             fromId = buffer.int
             toId = buffer.int
-            return dataState.apply {
+            return null/*dataState.apply {
                 loadingInfo.progress = loadedCount
                 loadingInfo.size = logCount
-            }
+            }*/
         }
         if (byteArray.size >= preliminarySize + logRowSize) {
             val count = (byteArray.size - preliminarySize) / logRowSize
