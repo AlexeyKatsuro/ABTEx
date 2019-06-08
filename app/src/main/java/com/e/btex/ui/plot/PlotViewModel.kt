@@ -5,10 +5,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.e.btex.base.BaseViewModel
 import com.e.btex.data.BtDevice
+import com.e.btex.data.SensorsType
 import com.e.btex.data.ServiceState
 import com.e.btex.data.entity.LoadingData
 import com.e.btex.data.entity.Sensors
-import com.e.btex.data.entity.StatusData
 import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.data.repository.SensorsRepository
 import com.e.btex.util.Event
@@ -18,19 +18,19 @@ import com.e.btex.util.extensions.trigger
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 class PlotViewModel @Inject constructor(
     private val sensorsRepository: SensorsRepository,
     private val deviceRepository: DeviceRepository
 ) : BaseViewModel() {
 
-
     val lastSensors = sensorsRepository.getLastSensorsLD()
 
     val lastStoreId = sensorsRepository.getLastIdLD()
 
     private val loadDataTrigger = MutableLiveData<Unit>()
-    val allSensors: LiveData<List<Sensors>> = loadDataTrigger.switchMap{
+    val allSensors: LiveData<List<Sensors>> = loadDataTrigger.switchMap {
         sensorsRepository.getAllSensorsLD()
     }
 
@@ -52,7 +52,12 @@ class PlotViewModel @Inject constructor(
             sensorsRepository.initConnection(it)
         }
 
+    private val _sensorsType = MutableLiveData<SensorsType>()
+    val sensorsType: LiveData<SensorsType>
+        get() = _sensorsType
+
     init {
+        _sensorsType.value = SensorsType.temperature
         loadDataTrigger.trigger()
         _loading.addSource(connectionState) {
             if (it is ServiceState.OnReceiveData && it.data is LoadingData) {
@@ -84,20 +89,24 @@ class PlotViewModel @Inject constructor(
         sensorsRepository.readLogs(fromId, toId)
     }
 
-    fun generate(){
+    fun generate() {
         scope.launch {
             sensorsRepository.generateTestData()
         }
     }
 
     fun getLastSensorsCount(count: Int) {
-        load( call = {sensorsRepository.getLastSensorsCount(count)}){
+        load(call = { sensorsRepository.getLastSensorsCount(count) }) {
             _lastCount.value = it
             it.forEach {
                 Timber.d("$it")
             }
 
         }
+    }
+
+    fun setSensorsType(type: SensorsType){
+        _sensorsType.value = type
     }
 
 

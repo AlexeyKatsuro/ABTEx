@@ -1,8 +1,10 @@
 package com.e.btex.data.entity
 
+import android.content.Context
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.e.btex.R
 import com.e.btex.data.SensorsType
 import com.e.btex.util.extensions.applyDispersion
 import com.e.btex.util.extensions.toFormattedStringUTC3
@@ -73,4 +75,28 @@ fun Sensors.Companion.getRandomValues(id: Int, time: Int): Sensors {
         783.applyDispersion(0.3).toFloat()
     )
 
+}
+
+fun SensorsType.getString(context: Context): String {
+    return when(this){
+        SensorsType.temperature -> context.getString(R.string.temperature)
+        SensorsType.humidity -> context.getString(R.string.humidity)
+        SensorsType.co2 -> context.getString(R.string.co2)
+        SensorsType.pm1 -> context.getString(R.string.pm1)
+        SensorsType.pm10 -> context.getString(R.string.pm10)
+        SensorsType.pm25 -> context.getString(R.string.pm25)
+        SensorsType.tvoc -> context.getString(R.string.tvoc)
+    }
+}
+
+fun SensorsType.getUnitsString(context: Context): String {
+    return when(this){
+        SensorsType.temperature -> context.getString(R.string.temperature_units)
+        SensorsType.humidity -> context.getString(R.string.humidity_units)
+        SensorsType.co2 -> context.getString(R.string.co2_units)
+        SensorsType.pm1 -> context.getString(R.string.pm1_units)
+        SensorsType.pm10 -> context.getString(R.string.pm10_units)
+        SensorsType.pm25 -> context.getString(R.string.pm25_units)
+        SensorsType.tvoc -> context.getString(R.string.tvoc_units)
+    }
 }

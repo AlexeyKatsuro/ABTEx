@@ -9,7 +9,7 @@
 
         <include
             android:id="@+id/include_app_bar"
-            app:title="@{@string/settings}"
+            app:title="@{@string/ble_devices}"
             layout="@layout/include_app_bar_bt" />
 
 

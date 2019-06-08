@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.e.btex.ui.MainActivity">
+    
+    <item android:title="@string/menu_navigation">
+        <menu>
+
+            <item
+                android:id="@id/showSettingsFragment"
+                android:icon="@drawable/ic_ble_devices"
+                android:orderInCategory="3"
+                android:title="@string/ble_devices"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@id/showDatabaseInfoFragment"
+                android:orderInCategory="5"
+                android:visible="true"
+                android:icon="@drawable/ic_storage"
+                android:title="@string/database"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+</menu>

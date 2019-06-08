@@ -45,8 +45,17 @@
     <string name="pm10_val">%1$.2f мкг/м³</string>
     <string name="pm25_val">%1$.2f мкг/м³</string>
     <string name="tvoc_val">%1$.2f мкг/м³</string>
+
+    <string name="temperature_units">°C от времени</string>
+    <string name="humidity_units">% от времени</string>
+    <string name="co2_units">ppm от времени</string>
+    <string name="pm1_units">мкг/м³ от времени</string>
+    <string name="pm10_units">мкг/м³ от времени</string>
+    <string name="pm25_units">мкг/м³ от времени</string>
+    <string name="tvoc_units">мкг/м³ от времени</string>
     
     <string name="count_percent">%1$d%%</string>
     <string name="count_item_of">%1$d/%2$d</string>
+    <string name="menu_navigation">Навигация</string>
 
 </resources>

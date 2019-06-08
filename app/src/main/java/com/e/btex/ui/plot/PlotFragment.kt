@@ -6,12 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import com.e.btex.R
 import com.e.btex.base.BaseFragment
 import com.e.btex.data.SensorsType
 import com.e.btex.data.ServiceState
 import com.e.btex.databinding.FragmentPlotBinding
+import com.e.btex.databinding.NavHeaderMainBinding
+import com.e.btex.ui.MainActivity
 import com.e.btex.util.EventObserver
 import com.e.btex.util.extensions.executeAfter
 import com.e.btex.util.extensions.observeNotNull
@@ -34,18 +38,22 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 
     private val bleAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
+    private val navHeader: NavHeaderMainBinding
+        get() = (requireActivity() as MainActivity).header
+
+    private val drawerLayout: DrawerLayout
+        get() = (requireActivity() as MainActivity).drawerLayout
+
+    private lateinit var sensorViewMap: Map<SensorsType, View>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
+        sensorViewMap = getSensorViewMap()
+
         binding.toolbar.apply {
-            inflateMenu(R.menu.menu_main)
+            inflateMenu(R.menu.menu_actions)
             setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.action_device_settings -> {
-                        val directions = PlotFragmentDirections.showSettingsFragment()
-                        navController.navigate(directions)
-                        true
-                    }
                     R.id.action_refresh -> {
                         viewModel.refreshConnection()
                         true
@@ -54,35 +62,28 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                         viewModel.closeConnection()
                         true
                     }
-                    R.id.action_database -> {
-                        val direction = PlotFragmentDirections.showDatabaseInfoFragment()
-                        navController.navigate(direction)
-                        true
-                    }
                     else -> false
                 }
             }
-
-
         }
-        binding.bottomSheetValues.apply {
-            valueTemperature.setOnClickListener { binding.chart.setSensorsType(SensorsType.temperature) }
-            valueHumidity.setOnClickListener { binding.chart.setSensorsType(SensorsType.humidity) }
-            valueCo2.setOnClickListener { binding.chart.setSensorsType(SensorsType.co2) }
-            valuePm1.setOnClickListener { binding.chart.setSensorsType(SensorsType.pm1) }
-            valuePm25.setOnClickListener { binding.chart.setSensorsType(SensorsType.pm25) }
-            valuePm10.setOnClickListener { binding.chart.setSensorsType(SensorsType.pm10) }
-            valueTvoc.setOnClickListener { binding.chart.setSensorsType(SensorsType.tvoc) }
+        navHeader.includeSensors.apply {
+            sensorViewMap.forEach { entry ->
+                entry.value.setOnClickListener {
+                    viewModel.setSensorsType(entry.key)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+            }
         }
 
         return view
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadTargetAddress()
         viewModel.getLastSensorsCount(1000)
-        navController
+
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
                 val directions = PlotFragmentDirections.startWithSettingsFragment()
@@ -109,7 +110,9 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         })
 
         viewModel.lastSensors.observeNotNull(viewLifecycleOwner) {
-            binding.executeAfter {
+           // binding.chart.addSensor(it)
+            viewModel.getLastSensorsCount(1000)
+            (requireActivity() as MainActivity).header.executeAfter {
                 sensors = it
             }
         }
@@ -121,37 +124,17 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             }
         }
 
+        viewModel.sensorsType.observe(viewLifecycleOwner, Observer {
+            binding.chart.setSensorsType(it)
+            sensorViewMap.forEach {entry ->
+                entry.value.isActivated = entry.key == it
+            }
+        })
+
     }
 
 
-    private fun addNewSensorVal(value: Float, time: Long) {
 
-        var data: LineData? = binding.chart.getData()
-        if (data == null) {
-            data = LineData()
-            binding.chart.setData(data)
-        }
-
-        var set: ILineDataSet? = data.getDataSetByIndex(0)
-        // set.addEntry(...); // can be called as well
-
-        if (set == null) {
-            set = createSet()
-            data.addDataSet(set)
-        }
-
-        data.addEntry(Entry(time.toFloat(), value), 0)
-
-
-        data.notifyDataChanged()
-        binding.chart.notifyDataSetChanged()
-        binding.chart.setVisibleXRangeMaximum(20f)
-        binding.chart.moveViewToX(data.getEntryCount().toFloat())
-
-        // this automatically refreshes the chart (calls invalidate())
-        // chart.moveViewTo(data.getXValCount()-7, 55f,
-        // AxisDependency.LEFT);
-    }
 
     private fun createSet(): LineDataSet {
 
@@ -205,7 +188,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
                 toolbar.subtitle = getString(R.string.state_offline)
                 toolbar.menu.findItem(R.id.action_turn_off).isVisible = false
             }
-
+            is ServiceState.OnReceiveData,
             is ServiceState.OnCreateConnection -> {
                 toolbar.subtitle = getString(R.string.state_online)
                 toolbar.menu.findItem(R.id.action_turn_off).isVisible = true
@@ -213,5 +196,16 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         }
     }
 
+    private fun getSensorViewMap(): Map<SensorsType, View> {
+        return mapOf(
+            SensorsType.temperature to navHeader.includeSensors.rowTemperature,
+            SensorsType.humidity to navHeader.includeSensors.rowHumidity,
+            SensorsType.co2 to navHeader.includeSensors.rowCo2,
+            SensorsType.pm1 to navHeader.includeSensors.rowPm1,
+            SensorsType.pm25 to navHeader.includeSensors.rowPm25,
+            SensorsType.pm10 to navHeader.includeSensors.rowPm10,
+            SensorsType.tvoc to navHeader.includeSensors.rowTvoc
+        )
+    }
 
 }

@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_normal"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/activity_main">
 
-    <include
-        android:id="@+id/include_sensors"
-        layout="@layout/bottom_sheet_sensors_values" />
+    <data>
 
-</LinearLayout>
+        <variable
+            name="sensors"
+            type="com.e.btex.data.entity.Sensors" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:fitsSystemWindows="false"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Light">
+
+        <include
+            android:id="@+id/include_sensors"
+            layout="@layout/layout_sensors_values"
+            app:sensors="@{sensors}" />
+
+    </FrameLayout>
+</layout>

@@ -74,7 +74,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_plotFragment_to_databaseInfoFragment">
+                            <entry key="showDatabaseInfoFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

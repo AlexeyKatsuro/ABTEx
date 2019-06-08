@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="sensors"
-            type="com.e.btex.data.entity.Sensors" />
-
-        <variable
             name="device"
             type="com.e.btex.data.BtDevice" />
     </data>
@@ -56,7 +52,10 @@
                 android:id="@+id/chart_container"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/bottom_sheet_peek_height"
+                android:paddingEnd="@dimen/margin_mini"
+                android:paddingStart="@dimen/margin_mini"
+                android:paddingBottom="@dimen/margin_small"
+                android:paddingTop="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,11 +71,6 @@
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <include
-            android:id="@+id/bottom_sheet_values"
-            layout="@layout/bottom_sheet_sensors_values"
-            app:sensors="@{sensors}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

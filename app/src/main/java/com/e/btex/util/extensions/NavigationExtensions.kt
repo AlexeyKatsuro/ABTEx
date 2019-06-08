@@ -33,3 +33,24 @@ fun Fragment.navigateUpHideKeyboard() {
     hideKeyboard()
     findNavController().navigateUp()
 }
+
+fun NavController.navigateIfNewDirection(navDirections: NavDirections) {
+    if (isNotCurrentDestination(navDirections.actionId)) {
+        navigate(navDirections)
+    }
+}
+
+fun NavController.navigateIfNewDirection(@IdRes resId: Int) {
+    if (isNotCurrentDestination(resId)) {
+        navigate(resId)
+    }
+}
+
+fun NavController.isNotCurrentDestination(@IdRes resId: Int): Boolean =
+    !isCurrentDestination(resId)
+
+fun NavController.isCurrentDestination(@IdRes resId: Int): Boolean {
+    val destId = currentDestination!!.getAction(resId)?.destinationId ?: resId
+    return currentDestination!!.id == destId
+}
+

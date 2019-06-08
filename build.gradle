@@ -22,7 +22,7 @@ buildscript {
         timber_version = '4.7.1'
         coroutines_version = '1.1.1'
         room_version = '1.1.1'
-        mp_chart_version = 'v3.1.0-alpha'
+        mp_chart_version = 'v3.1.0'
         recyclical_version = '0.7.2'
 
         junit_version = '4.12'
