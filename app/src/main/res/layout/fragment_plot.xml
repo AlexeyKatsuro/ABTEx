@@ -55,7 +55,7 @@
                 android:paddingEnd="@dimen/margin_mini"
                 android:paddingStart="@dimen/margin_mini"
                 android:paddingBottom="@dimen/margin_small"
-                android:paddingTop="40dp"
+                android:paddingTop="@dimen/chart_top_offset"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

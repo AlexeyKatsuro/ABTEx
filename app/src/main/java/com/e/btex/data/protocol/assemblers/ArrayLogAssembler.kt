@@ -54,6 +54,8 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
             val end = byteArray.sliceArray(index until byteArray.size)
             byteArray = start + end
             Timber.e("size: ${byteArray.size}")
+
+
             return dataState.copy(
                 data = ArrayLogData(
                     buffer.int + loadedCount,
@@ -84,6 +86,6 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
             )
         }.apply {
             loadedCount += size
-        }
+        }.filter { it.rTime != 0 } //TODO May be unstable
     }
 }
