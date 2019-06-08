@@ -13,6 +13,7 @@ import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.data.repository.SensorsRepository
 import com.e.btex.util.Event
 import com.e.btex.util.extensions.mapToEvent
+import com.e.btex.util.extensions.setValueIfNew
 import com.e.btex.util.extensions.switchMap
 import com.e.btex.util.extensions.trigger
 import kotlinx.coroutines.launch
@@ -62,7 +63,7 @@ class PlotViewModel @Inject constructor(
         _loading.addSource(connectionState) {
             if (it is ServiceState.OnReceiveData && it.data is LoadingData) {
                 _loading.value = it.data
-            }
+            } else _loading.setValueIfNew(LoadingData(0,0))
         }
     }
 

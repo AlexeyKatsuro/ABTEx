@@ -77,6 +77,10 @@ fun Sensors.Companion.getRandomValues(id: Int, time: Int): Sensors {
 
 }
 
+fun SensorsType.getStringWithUnits(context: Context): String {
+    return "${getString(context)} (${getUnitsString(context)})"
+}
+
 fun SensorsType.getString(context: Context): String {
     return when(this){
         SensorsType.temperature -> context.getString(R.string.temperature)

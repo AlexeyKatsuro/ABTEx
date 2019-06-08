@@ -71,6 +71,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@{@string/temperature_val(sensors.temperature)}"
+                android:textColor="@color/text_activeted_primary"
                 app:layout_constraintBottom_toBottomOf="@+id/image_temperature"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrier"
@@ -119,6 +120,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@{@string/humidity_val(sensors.humidity)}"
+                android:textColor="@color/text_activeted_primary"
                 tools:text="40%" />
         </LinearLayout>
 
@@ -163,6 +165,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@{@string/co2_val(sensors.co2)}"
+                android:textColor="@color/text_activeted_primary"
                 tools:text="455" />
         </LinearLayout>
 
@@ -201,8 +204,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-
                 android:text="@{@string/pm1_val(sensors.pm1)}"
+                android:textColor="@color/text_activeted_primary"
                 tools:text="1" />
 
         </LinearLayout>
@@ -243,6 +246,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@{@string/pm25_val(sensors.pm25)}"
+                android:textColor="@color/text_activeted_primary"
                 tools:text="0" />
 
         </LinearLayout>
@@ -283,8 +287,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-
                 android:text="@{@string/pm10_val(sensors.pm10)}"
+                android:textColor="@color/text_activeted_primary"
                 tools:text="0" />
 
         </LinearLayout>
@@ -326,6 +330,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="@{@string/tvoc_val(sensors.tvoc)}"
+                android:textColor="@color/text_activeted_primary"
                 tools:text="1" />
 
         </LinearLayout>

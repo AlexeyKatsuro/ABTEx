@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import com.e.btex.data.SensorsType
 import com.e.btex.data.entity.Sensors
 import com.e.btex.data.entity.getSensorValue
-import com.e.btex.data.entity.getUnitsString
+import com.e.btex.data.entity.getStringWithUnits
 import com.e.btex.util.extensions.defaultDatePattern
 import com.e.btex.util.extensions.toFormattedStringUTC3
 import com.github.mikephil.charting.charts.LineChart
@@ -91,6 +91,7 @@ class SensorsPlot @JvmOverloads constructor(
         isDragEnabled = true
         isScaleXEnabled = true
         isScaleYEnabled = false
+        legend.textSize  = 14f
         // if disabled, scaling can be done on x- and y-axis separately
         // setPinchZoom(true)
     }
@@ -111,7 +112,7 @@ class SensorsPlot @JvmOverloads constructor(
         val entry = currentDataSet.mapIndexed { index, sensors ->
             Entry((sensors.timeSeconds - referencePoint).toFloat(), sensors.getSensorValue(currentSensor))
         }
-        val lineDataSet = LineDataSet(entry, "(${currentSensor.getUnitsString(context)}")
+        val lineDataSet = LineDataSet(entry, currentSensor.getStringWithUnits(context))
         lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
         lineDataSet.valueFormatter = sensorValueFormatter
         lineDataSet.setDrawCircles(false)
