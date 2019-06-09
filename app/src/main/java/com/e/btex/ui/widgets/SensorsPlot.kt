@@ -2,11 +2,10 @@ package com.e.btex.ui.widgets
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
 import com.e.btex.data.SensorsType
 import com.e.btex.data.entity.Sensors
-import com.e.btex.data.entity.getSensorValue
 import com.e.btex.data.entity.getStringWithUnits
-import com.e.btex.util.UnixTimeUtils
 import com.e.btex.util.extensions.defaultDatePattern
 import com.e.btex.util.extensions.toFormattedStringUTC3
 import com.github.mikephil.charting.charts.LineChart
@@ -14,7 +13,9 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.listener.ChartTouchListener
+import com.github.mikephil.charting.listener.OnChartGestureListener
+import com.github.mikephil.charting.utils.MPPointF
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
@@ -35,6 +36,33 @@ class SensorsPlot @JvmOverloads constructor(
         get() = xAxisValueToDate(highestVisibleX)
 
     private var currentSensor: SensorsType = SensorsType.temperature
+
+    val gestureListener = object : OnChartGestureListener {
+        override fun onChartGestureEnd(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) = Unit
+
+
+        override fun onChartSingleTapped(me: MotionEvent?) = Unit
+
+        override fun onChartGestureStart(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) =
+            Unit
+
+        override fun onChartLongPressed(me: MotionEvent?) = Unit
+
+        override fun onChartDoubleTapped(me: MotionEvent?) = Unit
+
+        override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) {
+            updateDescription()
+        }
+
+        override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) {
+            updateDescription()
+        }
+
+        override fun onChartFling(me1: MotionEvent?, me2: MotionEvent?, velocityX: Float, velocityY: Float) {
+            updateDescription()
+        }
+
+    }
 
     private val dateFormatter = object : ValueFormatter() {
         override fun getFormattedValue(value: Float): String {
@@ -83,7 +111,6 @@ class SensorsPlot @JvmOverloads constructor(
 
     init {
         // enable touch gestures
-        setVisibleXRangeMaximum(100f)
 
         axisLeft.spaceBottom = 30f
         axisLeft.spaceTop = 30f
@@ -92,22 +119,24 @@ class SensorsPlot @JvmOverloads constructor(
         axisRight.spaceTop = 30f
         setTouchEnabled(true)
         description.isEnabled = false
-        //enable scaling and dragging
         xAxis.granularity = 10f
+        xAxis.spaceMin = 10f
+        xAxis.spaceMax = 10f
         xAxis.valueFormatter = dateFormatter
         isDragEnabled = true
         isScaleXEnabled = true
         isScaleYEnabled = false
-        legend.textSize  = 14f
+        legend.textSize = 14f
         setMaxVisibleValueCount(15)
-        // if disabled, scaling can be done on x- and y-axis separately
-        // setPinchZoom(true)
+        isHighlightPerDragEnabled = false
+        isHighlightPerDragEnabled = false
+        onChartGestureListener = gestureListener
     }
 
 
     fun setSensors(sensorsList: List<Sensors>) {
         //sensorDataSet.addAllEntry(sensorsList.map { SensorsEntry(it) })
-        if(sensorsList.isNotEmpty()){
+        if (sensorsList.isNotEmpty()) {
             referencePoint = sensorsList[0].timeSeconds
             sensorDataSet.zeroPoint = referencePoint
         }
@@ -140,6 +169,7 @@ class SensorsPlot @JvmOverloads constructor(
         }
         data?.notifyDataChanged()
         notifyDataSetChanged()
+        updateDescription()
         invalidate()
     }
 
@@ -158,6 +188,7 @@ class SensorsPlot @JvmOverloads constructor(
 
         data.notifyDataChanged()
         notifyDataSetChanged()
+        updateDescription()
         invalidate()
         //moveViewToX(data.getEntryCount().toFloat())
 
@@ -174,19 +205,40 @@ class SensorsPlot @JvmOverloads constructor(
         return units.convert(diffInMillies, TimeUnit.MILLISECONDS).toInt()
     }
 
-    private fun LineDataSet.addAllEntry(list: List<Entry>){
+    private fun LineDataSet.addAllEntry(list: List<Entry>) {
         list.forEach {
             addEntry(it)
         }
     }
+
+
+    private fun updateDescription() {
+        val diffInMill = highestVisibleDate.time - lowestVisibleDate.time
+        val pattern = "dd/MM/yy"
+        val text = when {
+
+            countDate(diffInMill, TimeUnit.DAYS) < 1 -> {
+                lowestVisibleDate.toFormattedStringUTC3(pattern)
+            }
+
+            else -> "${lowestVisibleDate.toFormattedStringUTC3(pattern)} " +
+                "- ${highestVisibleDate.toFormattedStringUTC3(pattern)}"
+        }
+
+        val descr = description
+        descr.isEnabled = true
+        descr.text = text
+        descr.textSize = 14f
+    }
+
 }
 
 
-fun SensorDataSet.getLastEntry(): SensorsEntry{
+fun SensorDataSet.getLastEntry(): SensorsEntry {
     return getEntryForIndex(entryCount - 1) as SensorsEntry
 }
 
-fun SensorDataSet.isEmpty(): Boolean{
+fun SensorDataSet.isEmpty(): Boolean {
     return entryCount == 0
 }
 
