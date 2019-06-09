@@ -82,7 +82,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadTargetAddress()
-        viewModel.getLastSensorsCount(1000)
+        //viewModel.getLastSensorsCount(1000)
 
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
@@ -110,19 +110,21 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         })
 
         viewModel.lastSensors.observeNotNull(viewLifecycleOwner) {
-           // binding.chart.addSensor(it)
-            viewModel.getLastSensorsCount(1000)
+
+            binding.chart.addSensor(it)
+
+            //viewModel.getLastSensorsCount(1000)
             (requireActivity() as MainActivity).header.executeAfter {
                 sensors = it
             }
         }
 
-        viewModel.lastCount.observeValue(viewLifecycleOwner) {
-
-            if (it.isNotEmpty()) {
-                binding.chart.setSensors(it)
-            }
-        }
+//        viewModel.lastCount.observeValue(viewLifecycleOwner) {
+//
+//            if (it.isNotEmpty()) {
+//                binding.chart.setSensors(it)
+//            }
+//        }
 
         viewModel.sensorsType.observe(viewLifecycleOwner, Observer {
             binding.chart.setSensorsType(it)
