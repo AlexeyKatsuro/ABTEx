@@ -107,6 +107,10 @@ class SensorsPlot @JvmOverloads constructor(
 
     fun setSensors(sensorsList: List<Sensors>) {
         //sensorDataSet.addAllEntry(sensorsList.map { SensorsEntry(it) })
+        if(sensorsList.isNotEmpty()){
+            referencePoint = sensorsList[0].timeSeconds
+            sensorDataSet.zeroPoint = referencePoint
+        }
         sensorDataSet.setSensors(sensorsList)
         updateChartDataSet()
     }
@@ -180,5 +184,9 @@ class SensorsPlot @JvmOverloads constructor(
 
 fun SensorDataSet.getLastEntry(): SensorsEntry{
     return getEntryForIndex(entryCount - 1) as SensorsEntry
+}
+
+fun SensorDataSet.isEmpty(): Boolean{
+    return entryCount == 0
 }
 

@@ -8,5 +8,5 @@ import kotlinx.android.parcel.Parcelize
 data class LoadingData(var progress: Int, var size: Int) : RemoteData {
     @IgnoredOnParcel
     val isLoading
-    get() = progress < size
+    get() = progress < size && size>1 //TODO After full storage reset bug with Progress bar with size 0
 }

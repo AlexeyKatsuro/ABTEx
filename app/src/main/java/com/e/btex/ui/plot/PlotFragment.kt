@@ -16,6 +16,7 @@ import com.e.btex.data.ServiceState
 import com.e.btex.databinding.FragmentPlotBinding
 import com.e.btex.databinding.NavHeaderMainBinding
 import com.e.btex.ui.MainActivity
+import com.e.btex.ui.widgets.isEmpty
 import com.e.btex.util.EventObserver
 import com.e.btex.util.extensions.executeAfter
 import com.e.btex.util.extensions.observeNotNull
@@ -111,11 +112,20 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 
         viewModel.lastSensors.observeNotNull(viewLifecycleOwner) {
 
-            binding.chart.addSensor(it)
+            if(viewModel.loading.value?.isLoading == true){
+                binding.chart.addSensor(it)
+            }
+
 
             //viewModel.getLastSensorsCount(1000)
             (requireActivity() as MainActivity).header.executeAfter {
                 sensors = it
+            }
+        }
+
+        viewModel.allSensors.observeValue(viewLifecycleOwner){
+           if(viewModel.loading.value?.isLoading == false){
+                binding.chart.setSensors(it)
             }
         }
 
