@@ -34,17 +34,16 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
 
     override fun assemble(bytes: ByteArray): DataState<ArrayLogData>? {
         byteArray += bytes
-        Timber.e("size: ${byteArray.size}")
 
         if (byteArray.size >= preliminarySize && toId == null && fromId == null) {
             val buffer = ByteBuffer.wrap(byteArray.sliceArray(0 until preliminarySize))
                 .order(ByteOrder.LITTLE_ENDIAN)
             fromId = buffer.int
             toId = buffer.int
-            return null/*dataState.apply {
+            return dataState.apply {
                 loadingInfo.progress = loadedCount
                 loadingInfo.size = logCount
-            }*/
+            }
         }
         if (byteArray.size >= preliminarySize + logRowSize) {
             val count = (byteArray.size - preliminarySize) / logRowSize
@@ -53,8 +52,6 @@ class ArrayLogAssembler : DataAssembler<ArrayLogData>() {
             val start = byteArray.sliceArray(0 until preliminarySize)
             val end = byteArray.sliceArray(index until byteArray.size)
             byteArray = start + end
-            Timber.e("size: ${byteArray.size}")
-
 
             return dataState.copy(
                 data = ArrayLogData(

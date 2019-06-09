@@ -102,12 +102,12 @@ class AqsService : BleService(), AqsInterface {
 
             if (dataState != null) {
                 dataState.loadingInfo.let {
-                    Timber.e("Loading ${it.progress}/${it.size}")
+                    Timber.d("Loading ${it.progress}/${it.size}")
                     if (dataState.data is ArrayLogData?) dataClassDisposing(it) //TODO
                 }
 
                 dataState.data?.let {
-                    Timber.e("onReceiveData $it")
+                    Timber.d("onReceiveData $it")
                     dataClassDisposing(it)
                 }
             }
@@ -124,7 +124,7 @@ class AqsService : BleService(), AqsInterface {
             is StatusData -> {
                 val lastStorageId = sensorsDao.getLastId() ?: 0
                 val lastAqsId = data.lastLogId
-                Timber.e("Status: lastStorageId: $lastStorageId, lastAqsId: $lastAqsId")
+                Timber.d("Status: lastStorageId: $lastStorageId, lastAqsId: $lastAqsId")
                 if (lastAqsId == lastStorageId + 1) {
                     sensorsDao.insert(statusDataMapper.map(data))
                 } else {
@@ -133,7 +133,7 @@ class AqsService : BleService(), AqsInterface {
                 //receiver.sendState(ServiceStates.OnReceiveData, data)
             }
             else -> {
-                Timber.e("$data")
+                Timber.d("$data")
                 receiver.sendState(ServiceStates.OnReceiveData, data)
             }
         }

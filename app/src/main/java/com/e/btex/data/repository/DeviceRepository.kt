@@ -10,17 +10,21 @@ class DeviceRepository @Inject constructor(
     private val preferenceStorage: PreferenceStorage,
     private val bluetoothDataSource: BluetoothDataSource
 ) {
-    fun getTargetAddress(): String? = preferenceStorage.targetDeviceAddress
 
-    fun setTargetAddress(deviceAddress: String) {
-        preferenceStorage.targetDeviceAddress = deviceAddress
+    fun setTargetDevice(device: BtDevice) {
+        preferenceStorage.targetDeviceName = device.name
+        preferenceStorage.targetDeviceAddress = device.macAddress
     }
 
     fun getTargetBtDevice(): BtDevice? {
-        val address = getTargetAddress()
-        return  address?.let {
-            bluetoothDataSource.getBtDevice(it)
-        }
+        val address = preferenceStorage.targetDeviceAddress
+        return if(address != null){
+            bluetoothDataSource.getBtDevice(address).let {
+                if(it.name.isEmpty()){
+                    it.copy(name = preferenceStorage.targetDeviceName?: "Device")
+                } else it
+            }
+        } else null
     }
 
     fun getServiceState() = bluetoothDataSource.getServiceState()

@@ -48,26 +48,25 @@ class DataBaseDataSource @Inject constructor(
         sensorsDao.getLastId()
 
     suspend fun generateTestData() {
-        val now = Date(UnixTimeUtils.currentUnixTimeMillis)
-        val c = Calendar.getInstance()
-        c.time = now
-        c.add(Calendar.DATE, -2)
-        var count = sensorsDao.getLastId() ?: 0
-        if (count == 0) {
-            while (c.time <= now) {
-                Timber.e(c.time.toFormattedStringUTC3())
-                c.add(Calendar.SECOND, 10)
-                count++
-                sensorsDao.insert(Sensors.getRandomValues(count, (c.timeInMillis / 1000).toInt()))
-            }
-        }
-
-        while (true) {
-            delay(10000)
-            sensorsDao.insert(Sensors.getRandomValues(++count, (UnixTimeUtils.currentUnixTimeSeconds)))
-            Timber.e("count: $count")
-        }
-
+//        val now = Date(UnixTimeUtils.currentUnixTimeMillis)
+//        val c = Calendar.getInstance()
+//        c.time = now
+//        c.add(Calendar.DATE, -2)
+//        var count = sensorsDao.getLastId() ?: 0
+//        if (count == 0) {
+//            while (c.time <= now) {
+//                Timber.d(c.time.toFormattedStringUTC3())
+//                c.add(Calendar.SECOND, 10)
+//                count++
+//                sensorsDao.insert(Sensors.getRandomValues(count, (c.timeInMillis / 1000).toInt()))
+//            }
+//        }
+//
+//        while (true) {
+//            delay(10000)
+//            sensorsDao.insert(Sensors.getRandomValues(++count, (UnixTimeUtils.currentUnixTimeSeconds)))
+//            Timber.e("count: $count")
+//        }
     }
 
     fun getLastSensorsCount(count: Int): List<Sensors> {

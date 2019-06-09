@@ -3,6 +3,7 @@ package com.e.btex.ui.bluetooth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.e.btex.base.BaseViewModel
+import com.e.btex.data.BtDevice
 import com.e.btex.data.repository.DeviceRepository
 import com.e.btex.util.extensions.map
 import com.e.btex.util.extensions.trigger
@@ -14,18 +15,19 @@ class SettingsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-    private val loadAdderssTrigger = MutableLiveData<Unit>()
-    val targetAddress: LiveData<String?> = loadAdderssTrigger.map {
-        deviceRepository.getTargetAddress()
+    private val loadTargetDevice = MutableLiveData<Unit>()
+    val targetDevice: LiveData<BtDevice?> = loadTargetDevice.map {
+        deviceRepository.getTargetBtDevice()
     }
 
 
     init {
-        loadAdderssTrigger.trigger()
+        loadTargetDevice.trigger()
     }
 
-    fun setTargetAddress(deviceAddress: String){
-        deviceRepository.setTargetAddress(deviceAddress)
-        loadAdderssTrigger.trigger()
+
+    fun setTargetDevice(device: BtDevice) {
+        deviceRepository.setTargetDevice(device)
+        loadTargetDevice.trigger()
     }
 }

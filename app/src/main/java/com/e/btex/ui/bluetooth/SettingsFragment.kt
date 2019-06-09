@@ -81,11 +81,11 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
             includeItem<BtDevice>(R.layout.item_bluetooth_decive) {
 
                 onDataBindingBind(ItemBluetoothDeciveBinding::bind) { _, item ->
-                    itemBinding.isTarget = viewModel.targetAddress.value == item.macAddress
+                    itemBinding.isTarget = viewModel.targetDevice.value?.macAddress == item.macAddress
                 }
 
                 onClick {
-                    viewModel.setTargetAddress(item.macAddress)
+                    viewModel.setTargetDevice(item)
                     val directions = SettingsFragmentDirections.showPlotFragment()
                     navController.navigate(directions)
                 }
@@ -101,8 +101,8 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding, SettingsViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.targetAddress.observe(this, Observer {
-            if (it.isNullOrEmpty()) {
+        viewModel.targetDevice.observe(this, Observer {
+            if (it == null) {
                 toast("Выберите устройство")
             }
         })

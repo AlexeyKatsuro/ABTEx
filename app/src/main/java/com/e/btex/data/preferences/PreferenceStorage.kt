@@ -13,6 +13,7 @@ import kotlin.reflect.KProperty
  */
 interface PreferenceStorage {
     var targetDeviceAddress: String?
+    var targetDeviceName: String?
 }
 
 /**
@@ -24,10 +25,12 @@ class SharedPreferenceStorage @Inject constructor(context: Context) : Preference
 
 
     override var targetDeviceAddress by StringPreference(prefs, PREFS_TARGET_ADDRESS, null)
-    
+    override var targetDeviceName by StringPreference(prefs, PREFS_TARGET_NAME, null)
+
     companion object {
         const val PREFS_NAME = "BTEx"
         const val PREFS_TARGET_ADDRESS = "target device address"
+        const val PREFS_TARGET_NAME = "target device name"
 
     }
 }
