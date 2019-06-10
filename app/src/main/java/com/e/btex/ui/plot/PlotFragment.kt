@@ -71,7 +71,12 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
             sensorViewMap.forEach { entry ->
                 entry.value.setOnClickListener {
                     viewModel.setSensorsType(entry.key)
-                    drawerLayout.closeDrawer(GravityCompat.START)
+                    //drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                entry.value.setOnLongClickListener {
+                    viewModel.setSensorsType2(entry.key)
+                    //drawerLayout.closeDrawer(GravityCompat.START)
+                    true
                 }
             }
         }
@@ -84,6 +89,20 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadTargetAddress()
         //viewModel.getLastSensorsCount(1000)
+
+        viewModel.sensorsType.observe(viewLifecycleOwner, Observer {
+            binding.chart.setSensorsType(it)
+            sensorViewMap.forEach {entry ->
+                entry.value.isActivated = entry.key == it
+            }
+        })
+
+        viewModel.sensorsType2.observe(viewLifecycleOwner, Observer {
+            binding.chart.setSensorsType2(it)
+            sensorViewMap.forEach {entry ->
+                entry.value.isActivated = entry.key == it
+            }
+        })
 
         viewModel.targetDevice.observe(this, EventObserver {
             if (it == null) {
@@ -136,12 +155,7 @@ class PlotFragment : BaseFragment<FragmentPlotBinding, PlotViewModel>() {
 //            }
 //        }
 
-        viewModel.sensorsType.observe(viewLifecycleOwner, Observer {
-            binding.chart.setSensorsType(it)
-            sensorViewMap.forEach {entry ->
-                entry.value.isActivated = entry.key == it
-            }
-        })
+
 
     }
 

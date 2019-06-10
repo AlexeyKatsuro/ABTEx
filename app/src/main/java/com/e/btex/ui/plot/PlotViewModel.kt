@@ -57,8 +57,13 @@ class PlotViewModel @Inject constructor(
     val sensorsType: LiveData<SensorsType>
         get() = _sensorsType
 
+    private val _sensorsType2 = MutableLiveData<SensorsType>()
+    val sensorsType2: LiveData<SensorsType>
+        get() = _sensorsType2
+
     init {
         _sensorsType.value = SensorsType.temperature
+        _sensorsType2.value = SensorsType.co2
         loadDataTrigger.trigger()
         _loading.addSource(connectionState) {
             if (it is ServiceState.OnReceiveData && it.data is LoadingData) {
@@ -108,6 +113,10 @@ class PlotViewModel @Inject constructor(
 
     fun setSensorsType(type: SensorsType){
         _sensorsType.value = type
+    }
+
+    fun setSensorsType2(type: SensorsType){
+        _sensorsType2.value = type
     }
 
 

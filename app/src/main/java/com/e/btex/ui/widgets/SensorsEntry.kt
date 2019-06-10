@@ -17,6 +17,7 @@ class SensorsEntry(val sensors: Sensors) : Entry() {
         return sensors.getSensorValue(currentSensor)
     }
 
+
     override fun getX(): Float {
         return (sensors.timeSeconds - zeroPoint).toFloat()
     }

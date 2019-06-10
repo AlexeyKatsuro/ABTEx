@@ -18,6 +18,7 @@ class SensorDataSet : LineDataSet(null,""){
         values = list.map { SensorsEntry(it).updateState() }
     }
 
+
     private fun SensorsEntry.updateState(): SensorsEntry{
         zeroPoint = this@SensorDataSet.zeroPoint
         currentSensor = this@SensorDataSet.currentSensor

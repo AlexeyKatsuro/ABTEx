@@ -3,18 +3,22 @@ package com.e.btex.ui.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.core.content.ContextCompat
+import com.e.btex.R
 import com.e.btex.data.SensorsType
 import com.e.btex.data.entity.Sensors
 import com.e.btex.data.entity.getStringWithUnits
 import com.e.btex.util.extensions.defaultDatePattern
 import com.e.btex.util.extensions.toFormattedStringUTC3
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -36,6 +40,7 @@ class SensorsPlot @JvmOverloads constructor(
         get() = xAxisValueToDate(highestVisibleX)
 
     private var currentSensor: SensorsType = SensorsType.temperature
+    private var currentSensor2: SensorsType = SensorsType.co2
 
     val gestureListener = object : OnChartGestureListener {
         override fun onChartGestureEnd(me: MotionEvent?, lastPerformedGesture: ChartTouchListener.ChartGesture?) = Unit
@@ -105,18 +110,29 @@ class SensorsPlot @JvmOverloads constructor(
     val sensorDataSet: SensorDataSet =
         SensorDataSet().apply {
             mode = LineDataSet.Mode.CUBIC_BEZIER
+            setAxisDependency(YAxis.AxisDependency.LEFT)
+            color = ColorTemplate.getHoloBlue()
             valueFormatter = sensorValueFormatter
             setDrawCircles(false)
         }
+    val sensorDataSet2: SensorDataSet = SensorDataSet().apply {
+        mode = LineDataSet.Mode.CUBIC_BEZIER
+        setAxisDependency(YAxis.AxisDependency.RIGHT)
+        color = (ContextCompat.getColor(context, R.color.colorPrimary))
+        valueFormatter = sensorValueFormatter
+        setDrawCircles(false)
+    }
 
     init {
         // enable touch gestures
 
         axisLeft.spaceBottom = 30f
         axisLeft.spaceTop = 30f
+        axisLeft.setTextColor(ColorTemplate.getHoloBlue())
 
         axisRight.spaceBottom = 30f
         axisRight.spaceTop = 30f
+        axisRight.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
         setTouchEnabled(true)
         description.isEnabled = false
         xAxis.granularity = 10f
@@ -139,8 +155,10 @@ class SensorsPlot @JvmOverloads constructor(
         if (sensorsList.isNotEmpty()) {
             referencePoint = sensorsList[0].timeSeconds
             sensorDataSet.zeroPoint = referencePoint
+            sensorDataSet2.zeroPoint = referencePoint
         }
         sensorDataSet.setSensors(sensorsList)
+        sensorDataSet2.setSensors(sensorsList)
         updateChartDataSet()
     }
 
@@ -157,13 +175,22 @@ class SensorsPlot @JvmOverloads constructor(
         updateChartDataSet()
     }
 
+    fun setSensorsType2(sensorsType: SensorsType) {
+        currentSensor2 = sensorsType
+        updateChartDataSet()
+    }
+
     private fun updateChartDataSet() {
         sensorDataSet.label = currentSensor.getStringWithUnits(context)
+        sensorDataSet2.label = currentSensor2.getStringWithUnits(context)
         sensorDataSet.currentSensor = currentSensor
+        sensorDataSet2.currentSensor = currentSensor2
         sensorDataSet.update()
+        sensorDataSet2.update()
         sensorDataSet.notifyDataSetChanged()
-        data = if (sensorDataSet.entryCount != 0) {
-            LineData(sensorDataSet)
+        sensorDataSet2.notifyDataSetChanged()
+        data = if (sensorDataSet.entryCount != 0 || sensorDataSet2.entryCount != 0) {
+            LineData(sensorDataSet, sensorDataSet2)
         } else {
             null
         }
@@ -176,14 +203,17 @@ class SensorsPlot @JvmOverloads constructor(
     fun addSensor(sensors: Sensors) {
 
         if (data == null) {
-            data = LineData(sensorDataSet)
+            data = LineData(sensorDataSet, sensorDataSet2)
             referencePoint = sensors.timeSeconds
             sensorDataSet.zeroPoint = referencePoint
+            sensorDataSet2.zeroPoint = referencePoint
         }
 
         val set: SensorDataSet = data.getDataSetByIndex(0) as SensorDataSet
+        val set2: SensorDataSet = data.getDataSetByIndex(1) as SensorDataSet
 
         set.addSensors(sensors)
+        set2.addSensors(sensors)
         //set.addEntry(Entry((sensors.timeSeconds - referencePoint).toFloat(), sensors.getSensorValue(currentSensor)))
 
         data.notifyDataChanged()
